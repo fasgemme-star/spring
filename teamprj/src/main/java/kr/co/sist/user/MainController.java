@@ -12,9 +12,9 @@ public class MainController {
 		return "redirect:index.html";
 	}
 	
-	@GetMapping("policy/infou")
+	@GetMapping("/policy/privacy")
 	public String showPolicy() {
-		return "policy/infou";
+		return "policy/privacy";
 	}
 	
 	@GetMapping("policy/terms")

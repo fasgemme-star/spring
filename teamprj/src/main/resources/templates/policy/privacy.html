@@ -272,7 +272,7 @@
 
 <!-- ===== 주요 기능 ===== -->
 <section class="features-section">
-  <h1>주요 기능</h1>
+  <h1>공지</h1>
 
   <div class="feature-tabs">
     <button class="feature-tab active" data-target="chat" onclick="selectFeature('chat', this)">
@@ -395,9 +395,9 @@
 <footer>
   <div class="footer-left">
     <span class="copyright">© WORKS</span>
-    <a href="/policy/privacy">개인정보처리방침</a>
+    <a th:href="@{/policy/privacy}">개인정보처리방침</a>
     <span class="divider">|</span>
-    <a href="/policy/terms">이용약관</a>
+    <a th:href="@{/policy/terms}">이용약관</a>
   </div>
 </footer>
 
