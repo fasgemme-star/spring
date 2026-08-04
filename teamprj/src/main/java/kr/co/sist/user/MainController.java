@@ -12,7 +12,7 @@ public class MainController {
 		return "redirect:index.html";
 	}
 	
-	@GetMapping("/policy/privacy")
+	@GetMapping("/policy/privacy ")
 	public String showPolicy() {
 		return "policy/privacy";
 	}
