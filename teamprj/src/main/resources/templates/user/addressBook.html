@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주소록</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f9fafb;
+        }
+
+        /* 커스텀 스크롤바 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; 
+        }
+
+        /* 테이블 로우 호버 및 선택 상태 */
+        .table-row-hover:hover {
+            background-color: #f3f4f6;
+            cursor: pointer;
+        }
+        .table-row-selected {
+            background-color: #eff6ff !important;
+        }
+
+        /* 체크박스 커스텀 */
+        .custom-checkbox {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 0.25rem;
+            border: 1px solid #d1d5db;
+            appearance: none;
+            cursor: pointer;
+            outline: none;
+        }
+        .custom-checkbox:checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-gray-800 text-sm">
+
+    <!-- Header -->
+    <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0 z-10 relative">
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 text-teal-500 font-bold text-lg">
+                <i class="fa-solid fa-address-book"></i>
+                <span class="text-gray-800">주소록</span>
+            </div>
+            
+            <div class="relative w-96">
+                <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="text" placeholder="연락처, 태그 검색" class="w-full bg-gray-100 border-none rounded-full py-1.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-100 text-sm">
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 text-gray-500 text-lg">
+            <button class="hover:text-blue-500 text-blue-500"><i class="fa-solid fa-house"></i></button>
+            <button class="hover:text-green-500 text-green-500"><i class="fa-solid fa-envelope"></i></button>
+            <button class="hover:text-blue-400 text-blue-400"><i class="fa-solid fa-calendar-check"></i></button>
+            <button class="hover:text-purple-500 text-purple-500"><i class="fa-solid fa-clipboard-list"></i></button>
+            <div class="w-px h-4 bg-gray-300 mx-1"></div>
+            <button class="hover:text-gray-700"><i class="fa-solid fa-grip"></i></button>
+            <button class="hover:text-gray-700"><i class="fa-regular fa-bell"></i></button>
+            <button class="hover:text-gray-700"><i class="fa-solid fa-sitemap"></i></button>
+            <button class="hover:text-gray-700"><i class="fa-solid fa-gear"></i></button>
+            <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm ml-2 cursor-pointer">윤</div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="w-56 bg-white border-r border-gray-200 flex flex-col shrink-0">
+            <div class="flex p-4 border-b border-gray-100">
+                <button class="flex-1 flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-gray-800">
+                    <i class="fa-regular fa-star text-lg"></i>
+                    <span class="text-xs">즐겨찾기</span>
+                </button>
+                <button class="flex-1 flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-gray-800 border-l border-gray-100">
+                    <i class="fa-solid fa-users text-lg"></i>
+                    <span class="text-xs">그룹</span>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto py-2">
+                <!-- 조직도 Tree -->
+                <div class="px-2">
+                    <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-700">
+                        <i class="fa-solid fa-caret-down text-gray-400"></i>
+                        <span>조직도</span>
+                    </div>
+                    
+                    <div class="pl-4">
+                        <div class="flex items-center gap-2 px-2 py-1.5 bg-blue-50 text-blue-600 rounded cursor-pointer font-medium">
+                            <i class="fa-solid fa-caret-down"></i>
+                            <i class="fa-regular fa-building"></i>
+                            <span>연습</span>
+                        </div>
+                        
+                        <div class="pl-6 mt-1">
+                            <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
+                                <i class="fa-solid fa-user-group text-gray-400"></i>
+                                <span>1</span>
+                            </div>
+                            <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
+                                <i class="fa-solid fa-user-group text-gray-400"></i>
+                                <span>2</span>
+                            </div>
+                            <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
+                                <i class="fa-solid fa-user-group text-gray-400"></i>
+                                <span>3</span>
+                            </div>
+                            <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
+                                <i class="fa-solid fa-users-line text-gray-400"></i>
+                                <span>그룹</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer text in sidebar -->
+            <div class="p-4 text-[10px] text-gray-400 border-t border-gray-100">
+                © NAVER Cloud Corp.
+            </div>
+        </aside>
+
+        <!-- Main Content (Table Area) -->
+        <main class="flex-1 flex flex-col min-w-0 bg-white relative">
+            
+            <!-- Content Header -->
+            <div class="px-8 pt-8 pb-4">
+                <h1 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                    <span th:text="${currentDept != null ? currentDept : '연습'}">연습</span>
+                    <span class="text-blue-500" th:text="${contacts != null ? contacts.size() : '5'}">5</span>
+                </h1>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="px-8 pb-3 border-b border-gray-200 flex items-center gap-3">
+                <input type="checkbox" class="custom-checkbox">
+                <button class="px-3 py-1.5 bg-white border border-gray-300 rounded text-gray-600 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-50" disabled>
+                    <i class="fa-regular fa-comment"></i> 메시지
+                </button>
+            </div>
+
+            <!-- Data Table -->
+            <div class="flex-1 overflow-auto">
+                <table class="w-full text-left whitespace-nowrap">
+                    <thead class="sticky top-0 bg-white border-b border-gray-200 z-10">
+                        <tr class="text-gray-500 text-xs">
+                            <th class="w-12 px-4 py-3 text-center"></th>
+                            <th class="w-10 px-2 py-3 text-center"></th>
+                            <th class="px-4 py-3 cursor-pointer hover:text-gray-800">이름 <i class="fa-solid fa-sort text-gray-300 ml-1"></i></th>
+                            <th class="px-4 py-3">직책/직급</th>
+                            <th class="px-4 py-3">부서</th>
+                            <th class="px-4 py-3 cursor-pointer hover:text-gray-800">소속 <i class="fa-solid fa-filter text-gray-300 ml-1"></i></th>
+                            <th class="px-4 py-3 cursor-pointer hover:text-gray-800">이메일 <i class="fa-solid fa-filter text-gray-300 ml-1"></i></th>
+                            <th class="px-4 py-3 cursor-pointer hover:text-gray-800">전화번호 <i class="fa-solid fa-filter text-gray-300 ml-1"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700">
+                        <!-- Thymeleaf Iterator Example -->
+                        <!-- 실제 연동 시 th:each="contact : ${contacts}" 를 사용합니다. 
+                             현재는 프론트엔드 확인을 위해 더미 데이터를 Thymeleaf 문법으로 처리해두었습니다. -->
+                        <tr class="border-b border-gray-100 table-row-hover contact-row" 
+                            th:each="contact, iterStat : ${#numbers.sequence(1, 5)}"
+                            onclick="selectRow(this, event)">
+                            
+                            <!-- Static Demo Data Switch (서버 연동 전 더미 표현을 위한 로직) -->
+                            <th:block th:switch="${iterStat.count}">
+                                <th:block th:case="1" th:with="name='12', initial='1', title='사원 / 아르바이트', dept='1', org='연습', email='test1@practice-6.by-works.net', color='bg-indigo-500'"></th:block>
+                                <th:block th:case="2" th:with="name='윤진영', initial='윤', title='', dept='', org='연습', email='yjy3838@practice-6.by-works.net', color='bg-purple-500'"></th:block>
+                                <th:block th:case="3" th:with="name='이다영', initial='이', title='', dept='1', org='연습', email='tooth.dayoung@practice-6.by-works.net', color='bg-teal-500'"></th:block>
+                                <th:block th:case="4" th:with="name='이원석', initial='이', title='', dept='3', org='연습', email='fasgemme@practice-6.by-works.net', color='bg-indigo-400'"></th:block>
+                                <th:block th:case="5" th:with="name='최유정', initial='최', title='', dept='2', org='연습', email='choi.yoojung@practice-6.by-works.net', color='bg-emerald-600'"></th:block>
+                            </th:block>
+
+                            <td class="px-4 py-3 text-center" onclick="event.stopPropagation();">
+                                <input type="checkbox" class="custom-checkbox">
+                            </td>
+                            <td class="px-2 py-3 text-center" onclick="event.stopPropagation(); toggleStar(this)">
+                                <i class="fa-regular fa-star text-gray-300 hover:text-yellow-400 cursor-pointer"></i>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full text-white flex items-center justify-center font-medium text-xs"
+                                         th:classappend="${color != null ? color : 'bg-indigo-500'}"
+                                         th:text="${initial != null ? initial : '1'}">1</div>
+                                    <span class="font-medium" th:text="${name != null ? name : '12'}">12</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3" th:text="${title != null ? title : '사원 / 아르바이트'}">사원 / 아르바이트</td>
+                            <td class="px-4 py-3" th:text="${dept != null ? dept : '1'}">1</td>
+                            <td class="px-4 py-3" th:text="${org != null ? org : '연습'}">연습</td>
+                            <td class="px-4 py-3" th:text="${email != null ? email : 'test1@practice-6.by-works.net'}">test1@practice-6.by-works.net</td>
+                            <td class="px-4 py-3"></td>
+                            
+                            <!-- Hidden Data for JS panel population -->
+                            <input type="hidden" class="data-initial" th:value="${initial != null ? initial : '1'}">
+                            <input type="hidden" class="data-color" th:value="${color != null ? color : 'bg-indigo-500'}">
+                            <input type="hidden" class="data-name" th:value="${name != null ? name : '12'}">
+                            <input type="hidden" class="data-title" th:value="${title != null ? title : '사원 / 아르바이트'}">
+                            <input type="hidden" class="data-org" th:value="${org != null ? org : '연습'}">
+                            <input type="hidden" class="data-dept" th:value="${dept != null ? dept : '1'}">
+                            <input type="hidden" class="data-email" th:value="${email != null ? email : 'test1@practice-6.by-works.net'}">
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="border-t border-gray-200 py-4 flex justify-center bg-white">
+                <button class="w-7 h-7 rounded-full bg-gray-700 text-white flex items-center justify-center text-xs">1</button>
+            </div>
+        </main>
+
+        <!-- Right Side Panel (Detail View) -->
+        <aside id="detailPanel" class="w-[380px] bg-white border-l border-gray-200 shadow-[-4px_0_15px_rgba(0,0,0,0.03)] flex flex-col transform transition-transform duration-300 translate-x-full absolute right-0 top-14 bottom-0 z-20">
+            <!-- Close Button -->
+            <div class="flex justify-end p-4 pb-0">
+                <button onclick="closePanel()" class="text-gray-400 hover:text-gray-700 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Profile Header -->
+            <div class="px-8 pb-6 relative">
+                <button class="absolute top-0 right-8 text-gray-300 hover:text-yellow-400 text-lg">
+                    <i class="fa-regular fa-star"></i>
+                </button>
+                
+                <div class="flex items-center gap-5 mt-2">
+                    <div id="panelAvatar" class="w-20 h-20 rounded-full bg-indigo-500 text-white flex items-center justify-center font-medium text-3xl shrink-0">
+                        1
+                    </div>
+                    <div>
+                        <h2 id="panelName" class="text-2xl font-bold text-gray-800">12</h2>
+                        <p id="panelTitle" class="text-gray-500 mt-1">사원/아르바이트</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-center gap-8 py-5 border-y border-gray-100">
+                <button class="flex flex-col items-center gap-2 text-blue-600 hover:text-blue-700">
+                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-comment"></i>
+                    </div>
+                    <span class="text-xs">메시지</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 text-blue-600 hover:text-blue-700">
+                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <span class="text-xs">메일</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 text-blue-600 hover:text-blue-700">
+                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <span class="text-xs">캘린더</span>
+                </button>
+            </div>
+
+            <!-- Details Information -->
+            <div class="p-8 flex-1 overflow-y-auto space-y-6">
+                <div>
+                    <h3 class="text-gray-400 text-xs mb-1">소속</h3>
+                    <p id="panelOrg" class="text-gray-800 font-medium">연습</p>
+                    <p id="panelDeptTitle" class="text-gray-600 mt-0.5"><span id="panelDept">1</span> <span class="text-gray-400 ml-1">사원</span></p>
+                </div>
+                
+                <div>
+                    <h3 class="text-gray-400 text-xs mb-1">이메일</h3>
+                    <a href="#" id="panelEmail" class="text-blue-500 hover:underline">test1@practice-6.by-works.net</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        // 별 아이콘(즐겨찾기) 토글
+        function toggleStar(element) {
+            const icon = element.querySelector('i');
+            if (icon.classList.contains('fa-regular')) {
+                icon.classList.remove('fa-regular', 'text-gray-300');
+                icon.classList.add('fa-solid', 'text-yellow-400');
+            } else {
+                icon.classList.remove('fa-solid', 'text-yellow-400');
+                icon.classList.add('fa-regular', 'text-gray-300');
+            }
+        }
+
+        // 로우 선택 및 우측 상세 패널 열기
+        function selectRow(row, event) {
+            // 다른 로우의 선택 상태 제거
+            document.querySelectorAll('.contact-row').forEach(r => {
+                r.classList.remove('table-row-selected');
+            });
+            // 현재 로우 선택 상태 추가
+            row.classList.add('table-row-selected');
+
+            // 숨겨진 Input 데이터 가져오기
+            const initial = row.querySelector('.data-initial').value;
+            let color = row.querySelector('.data-color').value;
+            const name = row.querySelector('.data-name').value;
+            let title = row.querySelector('.data-title').value;
+            const org = row.querySelector('.data-org').value;
+            const dept = row.querySelector('.data-dept').value;
+            const email = row.querySelector('.data-email').value;
+
+            // 데이터 포맷팅 보정 (빈값 처리)
+            if(!title || title.trim() === '') title = '직급 없음';
+
+            // 우측 패널에 데이터 세팅
+            const avatarElem = document.getElementById('panelAvatar');
+            avatarElem.className = `w-20 h-20 rounded-full text-white flex items-center justify-center font-medium text-3xl shrink-0 ${color}`;
+            avatarElem.innerText = initial;
+            
+            document.getElementById('panelName').innerText = name;
+            document.getElementById('panelTitle').innerText = title;
+            document.getElementById('panelOrg').innerText = org;
+            document.getElementById('panelDept').innerText = dept;
+            
+            // 부서가 없으면 텍스트 숨김 처리
+            const deptTitleWrapper = document.getElementById('panelDeptTitle');
+            if(dept && dept.trim() !== '') {
+                deptTitleWrapper.style.display = 'block';
+            } else {
+                deptTitleWrapper.style.display = 'none';
+            }
+
+            document.getElementById('panelEmail').innerText = email;
+            document.getElementById('panelEmail').href = `mailto:${email}`;
+
+            // 패널 열기 애니메이션
+            const panel = document.getElementById('detailPanel');
+            panel.classList.remove('translate-x-full');
+        }
+
+        // 우측 상세 패널 닫기
+        function closePanel() {
+            const panel = document.getElementById('detailPanel');
+            panel.classList.add('translate-x-full');
+            
+            // 로우 선택 상태 해제
+            document.querySelectorAll('.contact-row').forEach(r => {
+                r.classList.remove('table-row-selected');
+            });
+        }
+    </script>
+</body>
+</html>
