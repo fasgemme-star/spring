@@ -1,9 +1,10 @@
 <!-- ===== Header ===== -->
 <header class="top-nav" th:fragment="header">
-  <div class="logo">
+  <!-- div 태그를 a 태그로 변경하고 메인 경로("/") 연결 -->
+  <a class="logo" th:href="@{/}">
     <span class="logo-mark">W</span>
     <span>WORKS</span>
-  </div>
+  </a>
   <nav class="nav-links">
     <a th:href="@{/login}">로그인</a>
     <a th:href="@{/signup}">회원가입</a>
@@ -24,6 +25,24 @@
       <a th:href="@{/support/inquiry}">1:1문의</a>
     </div>
   </div>
+  
+  <script>
+  function toggleSupport() {
+    document.getElementById('supportToggle').classList.toggle('open');
+    document.getElementById('supportDropdown').classList.toggle('show');
+  }
+
+  document.addEventListener('click', function (e) {
+    const toggle = document.getElementById('supportToggle');
+    const dropdown = document.getElementById('supportDropdown');
+    
+    if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+      toggle.classList.remove('open');
+      dropdown.classList.remove('show');
+    }
+  });
+</script>
+  
 </div>
 
 <!-- footer -->

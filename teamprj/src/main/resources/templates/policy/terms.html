@@ -3,7 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <title th:text="${pageTitle} ?: 'WORKS - 협업이 쉬워지는 프로젝트 공간'">WORKS</title>
-  <style>
+  <style type="text/css">
+  :root {
+  --orange: #FF6B35;
+  --orange-light: #FFF1EB;
+  --text-main: #222;
+  --text-sub: #666;
+  --border: #E5E5E5;
+  --footer-bg: #1A1A1A;
+  --blue: #4A6CF7;
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+/* 푸터를 맨 아래로 내리기 위한 전체 높이 설정 */
+html, body {
+  height: 100%;
+}
+
+/* 중복 정리된 body */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 화면의 최소 높이를 100%로 설정 */
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: var(--text-main);
+  background: #fff;
+}
+
+a { 
+  text-decoration: none; 
+  color: inherit; 
+}
+
+/* ===== Header ===== */
+header.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 18px;
+}
+.logo .logo-mark {
+  width: 26px; height: 26px;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+.top-nav .nav-links { display: flex; gap: 24px; font-size: 14px; color: var(--text-sub); }
+.top-nav .nav-links a:hover { color: var(--text-main); }
+
+/* ===== Sub banner / 고객센터 ===== */
+.sub-banner {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 40px;
+  background: #FAFAFA;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.sub-banner .brand-name { color: var(--orange); font-weight: 700; }
+.support-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  color: var(--text-sub);
+  user-select: none;
+}
+.support-toggle .arrow {
+  display: inline-block;
+  transition: transform .2s ease;
+  font-size: 11px;
+}
+.support-toggle.open .arrow { transform: rotate(180deg); }
+
+.support-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 40px;
+  width: 220px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+  z-index: 20;
+  display: none;
+}
+.support-dropdown.show { display: block; }
+.support-dropdown a {
+  display: block;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border);
+}
+.support-dropdown a:last-child { border-bottom: none; }
+.support-dropdown a:hover { background: var(--orange-light); color: var(--orange); }
+
+/* ===== 주요 기능 섹션 ===== */
+.features-section { padding: 60px 40px 20px; text-align: center; }
+.features-section h1 { font-size: 28px; font-weight: 800; margin-bottom: 40px; }
+
+.feature-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 56px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+.feature-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+  color: var(--text-sub);
+}
+.feature-tab .icon-box {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  color: var(--text-sub);
+  transition: all .15s ease;
+}
+.feature-tab .icon-box svg { width: 22px; height: 22px; stroke: currentColor; }
+.feature-tab span.label { font-size: 14px; font-weight: 600; }
+
+.feature-tab.active { color: var(--orange); }
+.feature-tab.active .icon-box {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: var(--orange-light);
+}
+
+/* ===== 본문: 좌측 카드 + 우측 데모 ===== */
+/* 중복 정리된 demo-wrap */
+.demo-wrap {
+  flex: 1; /* 본문 영역이 남은 화면 세로 공간을 꽉 채우도록 설정 */
+  display: flex;
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto 80px;
+  padding: 0 40px;
+  align-items: flex-start;
+  text-align: left;
+}
+.demo-cards { display: flex; flex-direction: column; gap: 18px; width: 300px; flex-shrink: 0; }
+.demo-card {
+  border: 1.5px solid var(--orange);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+.demo-card .card-title {
+  display: inline-block;
+  color: var(--orange);
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.demo-card p { font-size: 13.5px; line-height: 1.6; color: var(--text-sub); }
+
+.demo-visual {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  min-height: 420px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+.visual-panel { display: none; }
+.visual-panel.show { display: block; }
+
+/* generic mock UI bits */
+.mock-toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 14px; margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--text-sub);
+}
+.mock-toolbar .title-tag { font-weight: 700; color: var(--text-main); }
+.pill { padding: 4px 10px; border-radius: 6px; background: #F2F2F2; font-size: 12px; }
+.pill.active { background: var(--blue); color: #fff; }
+
+.mock-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 8px;
+  border-bottom: 1px solid #F0F0F0;
+  font-size: 13px;
+}
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #D9D9D9;
+  flex-shrink: 0;
+}
+.avatar.blue { background: var(--blue); }
+.mock-row .name { font-weight: 600; }
+.mock-row .sub { color: var(--text-sub); font-size: 12px; }
+
+.checkbox {
+  width: 16px; height: 16px; border-radius: 4px;
+  border: 1.5px solid #C9C9C9; flex-shrink: 0;
+}
+.checkbox.done { background: var(--blue); border-color: var(--blue); }
+
+.admin-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 14px;
+}
+.admin-tile {
+  border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+  font-size: 13px;
+}
+.admin-tile .num { font-size: 20px; font-weight: 800; color: var(--orange); }
+.admin-tile .lbl { color: var(--text-sub); margin-top: 4px; }
+
+/* ===== Footer ===== */
+/* 중복 정리된 footer */
+footer {
+  margin-top: auto; /* 상단 여백을 자동으로 채워 맨 아래로 밀어줌 */
+  background: var(--footer-bg);
+  color: #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 40px;
+  font-size: 13px;
+}
+footer .footer-left { display: flex; align-items: center; gap: 18px; }
+footer .footer-left .copyright { color: #888; }
+footer a { color: #ccc; }
+footer a:hover { color: #fff; }
+footer .divider { color: #555; }
+
+/* ===== 반응형 미디어 쿼리 ===== */
+@media (max-width: 900px) {
+  .demo-wrap { flex-direction: column; }
+  .demo-cards { width: 100%; }
+  .feature-tabs { gap: 28px; }
+}
+  </style>
+<!--   <style>
     :root {
       --orange: #FF6B35;
       --orange-light: #FFF1EB;
@@ -238,38 +498,15 @@
       .demo-cards { width: 100%; }
       .feature-tabs { gap: 28px; }
     }
-  </style>
+  </style> -->
 </head>
 <body>
 
 <!-- ===== Header ===== -->
-<header class="top-nav">
-  <div class="logo">
-    <span class="logo-mark">W</span>
-    <span>WORKS</span>
-  </div>
-  <nav class="nav-links">
-    <a th:href="@{/login}">로그인</a>
-    <a th:href="@{/signup}">회원가입</a>
-  </nav>
-</header>
+<div th:replace="~{ fragments/all :: header }"></div>
 
 <!-- ===== Sub banner + 고객센터 드롭다운 ===== -->
-<div class="sub-banner">
-  <div>협업이 쉬워지는 프로젝트 공간, <span class="brand-name">WORKS</span></div>
-
-  <div style="position:relative;">
-    <div class="support-toggle" id="supportToggle" onclick="toggleSupport()">
-      <span>고객센터</span>
-      <span class="arrow">▾</span>
-    </div>
-    <div class="support-dropdown" id="supportDropdown">
-      <a th:href="@{/support/notice}">공지사항</a>
-      <a th:href="@{/support/inquiry}">1:1문의</a>
-    </div>
-  </div>
-</div>
-
+<div th:replace="~{ fragments/all :: subBanner }"></div>
 <!-- ===== 주요 기능 ===== -->
 <section class="features-section">
   <h1>문의</h1>

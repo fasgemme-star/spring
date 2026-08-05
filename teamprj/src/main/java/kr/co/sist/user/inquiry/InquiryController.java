@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class InquiryController {
 	
-	@GetMapping("term")
+	@GetMapping("inquiry")
 	public String insertInquiry(MultipartFile mpf , InquiryDTO iDTO, Model model) {
 		return "";
 	}

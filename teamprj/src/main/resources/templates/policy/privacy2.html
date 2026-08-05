@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 - WORKS</title>
+<style type="text/css">
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* 1. html과 body의 높이를 화면 전체로 설정 */
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  color: #333;
+  background: #fff;
+}
+
+header.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px;
+  border-bottom: 1px solid #eee;
+}
+.logo {
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.logo::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #00c471, #00b8d9);
+  display: inline-block;
+  border-radius: 4px;
+}
+.top-links { display: flex; gap: 20px; font-size: 13px; color: #555; }
+.sub-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background: #fafafa;
+  font-size: 13px;
+  color: #666;
+  border-bottom: 1px solid #eee;
+}
+
+/* 2. main 영역이 남은 화면 세로 높이를 다 차지하도록 flex: 1 추가 */
+main { 
+  flex: 1; 
+  width: 100%;
+  max-width: 860px; 
+  margin: 0 auto; 
+  padding: 48px 40px 60px; /* 기존 하단 패딩(120px)을 약간 줄여 유연성을 확보했습니다 */
+}
+
+h1.page-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; }
+
+/* ---- 목록 화면 ---- */
+.notice-list { border-top: 2px solid #222; }
+.notice-item { border-bottom: 1px solid #eee; }
+.notice-item .row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  text-decoration: none;
+}
+.notice-item .row:hover { color: #00b878; }
+.chevron { color: #999; }
+
+/* ---- 상세 화면 ---- */
+.detail-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.detail-date { font-size: 13px; color: #999; margin-bottom: 20px; }
+hr.divider { border: none; border-top: 1px solid #eee; margin-bottom: 24px; }
+.detail-body { font-size: 14px; line-height: 1.9; color: #333; }
+.detail-body p { margin-bottom: 14px; }
+.detail-body a { color: #00b878; }
+hr.divider-bottom { border: none; border-top: 1px solid #eee; margin: 32px 0 20px; }
+.back-link { font-size: 13px; color: #555; text-decoration: none; cursor: pointer; }
+.back-link:hover { color: #00b878; }
+
+/* 3. footer의 margin-top: auto 처리 */
+footer {
+  background: #222;
+  color: #ccc;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-top: auto; /* 고정 margin 대신 auto로 변경하여 화면 하단으로 밀어줌 */
+}
+    footer .footer-left { display: flex; align-items: center; gap: 18px; }
+    footer .footer-left .copyright { color: #888; }
+    footer a { color: #ccc; }
+    footer a:hover { color: #fff; }
+    footer .divider { color: #555; }
+</style>
+<link rel="stylesheet" th:href="@{/css/notice.css}">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">WORKS</div>
+  <div class="top-links"><span>로그인</span><span>회원가입</span></div>
+</header>
+<div class="sub-bar">
+  <span>협업이 쉬워지는 프로젝트 공간, WORKS</span>
+  <span>고객센터 ▽</span>
+</div>
+
+<main>
+  <h1 class="page-title">공지사항</h1>
+
+  <div class="notice-list">
+    <!-- notices: List<Notice> (id, title 포함) -->
+    <div class="notice-item" th:each="notice : ${notices}">
+      <a class="row" th:href="@{/notice/{id}(id=${notice.id})}">
+        <span th:text="${notice.title}">공지 제목</span>
+        <span class="chevron">⌄</span>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-left">
+    <span class="copyright">© WORKS</span>
+    <a href="/policy/privacy">개인정보처리방침</a>
+    <span class="divider">|</span>
+    <a href="/policy/terms">이용약관</a>
+  </div>
+</footer>
+
+</body>
+</html>
