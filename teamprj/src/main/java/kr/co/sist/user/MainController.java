@@ -9,7 +9,7 @@ public class MainController {
 
 	@GetMapping("/")
 	public String main() {
-		return "redirect:index.html";
+		return "index";
 	}
 	
 	@GetMapping("/policy/privacy")

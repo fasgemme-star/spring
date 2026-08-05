@@ -1,0 +1,37 @@
+<!-- ===== Header ===== -->
+<header class="top-nav" th:fragment="header">
+  <div class="logo">
+    <span class="logo-mark">W</span>
+    <span>WORKS</span>
+  </div>
+  <nav class="nav-links">
+    <a th:href="@{/login}">로그인</a>
+    <a th:href="@{/signup}">회원가입</a>
+  </nav>
+</header>
+
+<!-- ===== Sub banner===== -->
+<div class="sub-banner" th:fragment="subBanner">
+  <div>협업이 쉬워지는 프로젝트 공간, <span class="brand-name">WORKS</span></div>
+
+  <div style="position:relative;">
+    <div class="support-toggle" id="supportToggle" onclick="toggleSupport()">
+      <span>고객센터</span>
+      <span class="arrow">▾</span>
+    </div>
+    <div class="support-dropdown" id="supportDropdown">
+      <a th:href="@{/support/notice}">공지사항</a>
+      <a th:href="@{/support/inquiry}">1:1문의</a>
+    </div>
+  </div>
+</div>
+
+<!-- footer -->
+<footer th:fragment="footer">
+<div class="footer-left">
+    <span class="copyright">© WORKS</span>
+    <a href="/policy/privacy">개인정보처리방침</a>
+    <span class="divider">|</span>
+    <a href="/policy/terms">이용약관</a>
+  </div>
+</footer>

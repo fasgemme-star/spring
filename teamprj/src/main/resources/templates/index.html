@@ -284,32 +284,11 @@
 <body>
 
 <!-- ===== Header ===== -->
-<header class="top-nav">
-  <div class="logo">
-    <span class="logo-mark">W</span>
-    <span>WORKS</span>
-  </div>
-  <nav class="nav-links">
-    <a th:href="@{/login}">로그인</a>
-    <a th:href="@{/signup}">회원가입</a>
-  </nav>
-</header>
+<div th:replace="~{ fragments/all :: header }"></div>
+
 
 <!-- ===== Sub banner + 고객센터 드롭다운 ===== -->
-<div class="sub-banner">
-  <div>협업이 쉬워지는 프로젝트 공간, <span class="brand-name">WORKS</span></div>
-
-  <div style="position:relative;">
-    <div class="support-toggle" id="supportToggle" onclick="toggleSupport()">
-      <span>고객센터</span>
-      <span class="arrow">▾</span>
-    </div>
-    <div class="support-dropdown" id="supportDropdown">
-      <a th:href="@{/support/notice}">공지사항</a>
-      <a th:href="@{/support/inquiry}">1:1문의</a>
-    </div>
-  </div>
-</div>
+<div th:replace="~{ fragments/all :: subBanner }"></div>
 
 <!-- ===== 주요 기능 ===== -->
 <section class="features-section">
@@ -432,16 +411,8 @@
     </div>
   </div>
 </section>
-
-<footer>
-  <div class="footer-left">
-    <span class="copyright">© WORKS</span>
-    <a href="/policy/privacy">개인정보처리방침</a>
-    <span class="divider">|</span>
-    <a href="/policy/terms">이용약관</a>
-  </div>
-</footer>
-
+<!-- footer -->
+<footer th:replace="~{ fragments/all :: footer }"></footer>
 <script th:inline="javascript">
   function toggleSupport() {
     document.getElementById('supportToggle').classList.toggle('open');
