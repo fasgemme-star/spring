@@ -248,43 +248,14 @@ main.notice-container {
   padding: 50px 20px 80px; 
 }
 h1.page-title { 
-  font-size: 26px; 
+  font-size: 50px; 
   font-weight: 700; 
   margin-bottom: 24px; 
 }
 
 /* 공지사항 목록 */
-.notice-list { border-top: 2px solid var(--text-main); }
-.notice-item { border-bottom: 1px solid var(--border); }
-.notice-item .row {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 4px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--text-main);
-  text-align: left;
-  text-decoration: none;
-}
-/* 마우스 오버 시 메인 테마 오렌지색으로 변경 */
-.notice-item .row:hover { color: var(--orange); }
-.chevron { color: var(--text-sub); }
-
-/* 공지사항 상세 화면 */
-.detail-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-.detail-date { font-size: 13px; color: var(--text-sub); margin-bottom: 20px; }
-hr.divider { border: none; border-top: 1px solid var(--border); margin-bottom: 24px; }
-.detail-body { font-size: 14px; line-height: 1.9; color: var(--text-main); }
-.detail-body p { margin-bottom: 14px; }
-.detail-body a { color: var(--orange); }
-hr.divider-bottom { border: none; border-top: 1px solid var(--border); margin: 32px 0 20px; }
-.back-link { font-size: 13px; color: var(--text-sub); text-decoration: none; cursor: pointer; }
-.back-link:hover { color: var(--orange); }
-
+.privacy-list { border-top: 2px solid var(--text-main); }
+#privacy { width: 900px; }
 
 /* ===== Footer ===== */
 footer {
@@ -323,16 +294,11 @@ footer .divider { color: #555; }
 <!-- ===== 주요 기능 ===== -->
 
 <main class="notice-container">
-  <h1 class="page-title">공지사항</h1>
-
-  <div class="notice-list">
-    <div class="notice-item" th:each="notice : ${notices}">
-      <a class="row" th:href="@{/notice/{id}(id=${notice.id})}">
-        <span th:text="${notice.title}">공지 제목</span>
-        <span class="chevron">⌄</span>
-      </a>
-    </div>
-  </div>
+  <h1 class="page-title">개인정보처리방침</h1>
+	<div class="privacy-list">
+		<img th:src="@{/common/images/privacy.png}" id="privacy"/>
+	</div>
+ 
 </main>
 
 <!-- footer -->

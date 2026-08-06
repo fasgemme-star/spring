@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${pageTitle} ?: 'WORKS - 협업이 쉬워지는 프로젝트 공간'">WORKS</title>
-  <style type="text/css">
-  :root {
+<meta charset="UTF-8">
+<title>공지사항 - WORKS</title>
+<style type="text/css">
+:root {
   --orange: #FF6B35;
   --orange-light: #FFF1EB;
   --text-main: #222;
@@ -20,16 +20,15 @@
   padding: 0; 
 }
 
-/* 푸터를 맨 아래로 내리기 위한 전체 높이 설정 */
+/* ===== 전체 레이아웃 (푸터 하단 고정) ===== */
 html, body {
   height: 100%;
 }
 
-/* 중복 정리된 body */
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* 화면의 최소 높이를 100%로 설정 */
+  min-height: 100vh; 
   font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   color: var(--text-main);
   background: #fff;
@@ -117,7 +116,7 @@ header.top-nav {
 .support-dropdown a:last-child { border-bottom: none; }
 .support-dropdown a:hover { background: var(--orange-light); color: var(--orange); }
 
-/* ===== 주요 기능 섹션 ===== */
+/* ===== 주요 기능 섹션 (랜딩 페이지용) ===== */
 .features-section { padding: 60px 40px 20px; text-align: center; }
 .features-section h1 { font-size: 28px; font-weight: 800; margin-bottom: 40px; }
 
@@ -157,10 +156,9 @@ header.top-nav {
   background: var(--orange-light);
 }
 
-/* ===== 본문: 좌측 카드 + 우측 데모 ===== */
-/* 중복 정리된 demo-wrap */
+/* ===== 본문: 좌측 카드 + 우측 데모 (랜딩 페이지용) ===== */
 .demo-wrap {
-  flex: 1; /* 본문 영역이 남은 화면 세로 공간을 꽉 채우도록 설정 */
+  flex: 1; 
   display: flex;
   gap: 28px;
   max-width: 1200px;
@@ -196,7 +194,7 @@ header.top-nav {
 .visual-panel { display: none; }
 .visual-panel.show { display: block; }
 
-/* generic mock UI bits */
+/* Mock UI 요소들 */
 .mock-toolbar {
   display: flex; align-items: center; gap: 10px;
   padding-bottom: 14px; margin-bottom: 14px;
@@ -238,10 +236,30 @@ header.top-nav {
 .admin-tile .num { font-size: 20px; font-weight: 800; color: var(--orange); }
 .admin-tile .lbl { color: var(--text-sub); margin-top: 4px; }
 
+
+/* =========================================
+   공지사항 게시판 영역 (새로 추가 및 통합됨) 
+   ========================================= */
+main.notice-container { 
+  flex: 1; /* 푸터 밀어내기 */
+  width: 100%;
+  max-width: 900px; 
+  margin: 0 auto; 
+  padding: 50px 20px 80px; 
+}
+h1.page-title { 
+  font-size: 50px; 
+  font-weight: 700; 
+  margin-bottom: 24px; 
+}
+
+/* 약관 div */
+.terms-list { border-top: 2px solid var(--text-main); }
+#terms { width: 900px; }
+
 /* ===== Footer ===== */
-/* 중복 정리된 footer */
 footer {
-  margin-top: auto; /* 상단 여백을 자동으로 채워 맨 아래로 밀어줌 */
+  margin-top: auto; 
   background: var(--footer-bg);
   color: #ccc;
   display: flex;
@@ -261,421 +279,27 @@ footer .divider { color: #555; }
   .demo-wrap { flex-direction: column; }
   .demo-cards { width: 100%; }
   .feature-tabs { gap: 28px; }
+  
+  /* 모바일에서 공지사항 패딩 줄임 */
+  main.notice-container { padding: 32px 20px 40px; }
 }
-  </style>
-<!--   <style>
-    :root {
-      --orange: #FF6B35;
-      --orange-light: #FFF1EB;
-      --text-main: #222;
-      --text-sub: #666;
-      --border: #E5E5E5;
-      --footer-bg: #1A1A1A;
-      --blue: #4A6CF7;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      color: var(--text-main);
-      background: #fff;
-    }
-    a { text-decoration: none; color: inherit; }
-
-    /* ===== Header ===== */
-    header.top-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 40px;
-      border-bottom: 1px solid var(--border);
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 800;
-      font-size: 18px;
-    }
-    .logo .logo-mark {
-      width: 26px; height: 26px;
-      background: var(--orange);
-      color: #fff;
-      border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-    }
-    .top-nav .nav-links { display: flex; gap: 24px; font-size: 14px; color: var(--text-sub); }
-    .top-nav .nav-links a:hover { color: var(--text-main); }
-
-    /* ===== Sub banner / 고객센터 ===== */
-    .sub-banner {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 40px;
-      background: #FAFAFA;
-      border-bottom: 1px solid var(--border);
-      font-size: 14px;
-    }
-    .sub-banner .brand-name { color: var(--orange); font-weight: 700; }
-    .support-toggle {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      color: var(--text-sub);
-      user-select: none;
-    }
-    .support-toggle .arrow {
-      display: inline-block;
-      transition: transform .2s ease;
-      font-size: 11px;
-    }
-    .support-toggle.open .arrow { transform: rotate(180deg); }
-
-    .support-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 40px;
-      width: 220px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      overflow: hidden;
-      z-index: 20;
-      display: none;
-    }
-    .support-dropdown.show { display: block; }
-    .support-dropdown a {
-      display: block;
-      padding: 14px 18px;
-      font-size: 14px;
-      color: var(--text-main);
-      border-bottom: 1px solid var(--border);
-    }
-    .support-dropdown a:last-child { border-bottom: none; }
-    .support-dropdown a:hover { background: var(--orange-light); color: var(--orange); }
-
-    /* ===== 주요 기능 섹션 ===== */
-    .features-section { padding: 60px 40px 20px; text-align: center; }
-    .features-section h1 { font-size: 28px; font-weight: 800; margin-bottom: 40px; }
-
-    .feature-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 56px;
-      flex-wrap: wrap;
-      margin-bottom: 50px;
-    }
-    .feature-tab {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: inherit;
-      color: var(--text-sub);
-    }
-    .feature-tab .icon-box {
-      width: 48px; height: 48px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      border: 1px solid var(--border);
-      color: var(--text-sub);
-      transition: all .15s ease;
-    }
-    .feature-tab .icon-box svg { width: 22px; height: 22px; stroke: currentColor; }
-    .feature-tab span.label { font-size: 14px; font-weight: 600; }
-
-    .feature-tab.active { color: var(--orange); }
-    .feature-tab.active .icon-box {
-      border-color: var(--orange);
-      color: var(--orange);
-      background: var(--orange-light);
-    }
-
-    /* ===== 본문: 좌측 카드 + 우측 데모 ===== */
-    .demo-wrap {
-      display: flex;
-      gap: 28px;
-      max-width: 1200px;
-      margin: 0 auto 80px;
-      padding: 0 40px;
-      align-items: flex-start;
-      text-align: left;
-    }
-    .demo-cards { display: flex; flex-direction: column; gap: 18px; width: 300px; flex-shrink: 0; }
-    .demo-card {
-      border: 1.5px solid var(--orange);
-      border-radius: 10px;
-      padding: 18px 20px;
-    }
-    .demo-card .card-title {
-      display: inline-block;
-      color: var(--orange);
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-    .demo-card p { font-size: 13.5px; line-height: 1.6; color: var(--text-sub); }
-
-    .demo-visual {
-      flex: 1;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #fff;
-      min-height: 420px;
-      padding: 20px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-    }
-    .visual-panel { display: none; }
-    .visual-panel.show { display: block; }
-
-    /* generic mock UI bits */
-    .mock-toolbar {
-      display: flex; align-items: center; gap: 10px;
-      padding-bottom: 14px; margin-bottom: 14px;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px; color: var(--text-sub);
-    }
-    .mock-toolbar .title-tag { font-weight: 700; color: var(--text-main); }
-    .pill { padding: 4px 10px; border-radius: 6px; background: #F2F2F2; font-size: 12px; }
-    .pill.active { background: var(--blue); color: #fff; }
-
-    .mock-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 8px;
-      border-bottom: 1px solid #F0F0F0;
-      font-size: 13px;
-    }
-    .avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #D9D9D9;
-      flex-shrink: 0;
-    }
-    .avatar.blue { background: var(--blue); }
-    .mock-row .name { font-weight: 600; }
-    .mock-row .sub { color: var(--text-sub); font-size: 12px; }
-
-    .checkbox {
-      width: 16px; height: 16px; border-radius: 4px;
-      border: 1.5px solid #C9C9C9; flex-shrink: 0;
-    }
-    .checkbox.done { background: var(--blue); border-color: var(--blue); }
-
-    .admin-grid {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 14px;
-    }
-    .admin-tile {
-      border: 1px solid var(--border); border-radius: 10px; padding: 16px;
-      font-size: 13px;
-    }
-    .admin-tile .num { font-size: 20px; font-weight: 800; color: var(--orange); }
-    .admin-tile .lbl { color: var(--text-sub); margin-top: 4px; }
-
-    /* ===== Footer ===== */
-    footer {
-      background: var(--footer-bg);
-      color: #ccc;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 22px 40px;
-      font-size: 13px;
-    }
-    footer .footer-left { display: flex; align-items: center; gap: 18px; }
-    footer .footer-left .copyright { color: #888; }
-    footer a { color: #ccc; }
-    footer a:hover { color: #fff; }
-    footer .divider { color: #555; }
-
-    @media (max-width: 900px) {
-      .demo-wrap { flex-direction: column; }
-      .demo-cards { width: 100%; }
-      .feature-tabs { gap: 28px; }
-    }
-  </style> -->
+</style>
 </head>
 <body>
-
 <!-- ===== Header ===== -->
 <div th:replace="~{ fragments/all :: header }"></div>
-
 <!-- ===== Sub banner + 고객센터 드롭다운 ===== -->
 <div th:replace="~{ fragments/all :: subBanner }"></div>
 <!-- ===== 주요 기능 ===== -->
-<section class="features-section">
-  <h1>문의</h1>
 
-  <div class="feature-tabs">
-    <button class="feature-tab active" data-target="chat" onclick="selectFeature('chat', this)">
-      <span class="icon-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-        </svg>
-      </span>
-      <span class="label">채팅</span>
-    </button>
-
-    <button class="feature-tab" data-target="calendar" onclick="selectFeature('calendar', this)">
-      <span class="icon-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2"/>
-          <path d="M16 2v4M8 2v4M3 10h18"/>
-        </svg>
-      </span>
-      <span class="label">캘린더</span>
-    </button>
-
-    <button class="feature-tab" data-target="task" onclick="selectFeature('task', this)">
-      <span class="icon-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 11l3 3L22 4"/>
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-        </svg>
-      </span>
-      <span class="label">할일</span>
-    </button>
-
-    <button class="feature-tab" data-target="address" onclick="selectFeature('address', this)">
-      <span class="icon-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="2" width="16" height="20" rx="2"/>
-          <path d="M9 7h6M9 12h6M9 17h3"/>
-        </svg>
-      </span>
-      <span class="label">주소록</span>
-    </button>
-
-    <button class="feature-tab" data-target="admin" onclick="selectFeature('admin', this)">
-      <span class="icon-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 0 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
-        </svg>
-      </span>
-      <span class="label">관리자</span>
-    </button>
+<main class="notice-container">
+	<h1 class="page-title">이용약관</h1>
+	<div class="terms-list">
+	    <img th:src="@{/common/images/terms.png}" id="terms"/>
   </div>
+</main>
 
-  <!-- ===== 좌측 카드 + 우측 데모 화면 ===== -->
-  <div class="demo-wrap">
-
-    <!-- 좌측 설명 카드 (기능별로 전환) -->
-    <div class="demo-cards" id="cardsChat">
-      <div class="demo-card"><span class="card-title">실시간 대화 기능</span><p>구성원과 1:1 또는 그룹으로 실시간 채팅을 나눌 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">파일 공유 기능</span><p>대화 중 문서, 이미지를 바로 첨부하고 함께 확인할 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">읽음 확인 기능</span><p>메시지를 누가 읽었는지 한눈에 확인할 수 있습니다.</p></div>
-    </div>
-
-    <div class="demo-cards" id="cardsCalendar" style="display:none;">
-      <div class="demo-card"><span class="card-title">효율적인 협업 기능</span><p>물어보지 않아도 다른 구성원의 일정을 확인할 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">상세 검색 기능</span><p>제목 또는 키워드만 알아도 모든 일정을 검색하여 확인할 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">즐겨찾기 기능</span><p>자주 연락하는 구성원은 즐겨찾는 일정에 추가하여 일정을 쉽게 확인할 수 있습니다.</p></div>
-    </div>
-
-    <div class="demo-cards" id="cardsTask" style="display:none;">
-      <div class="demo-card"><span class="card-title">할일 배정 기능</span><p>업무를 구성원에게 배정하고 진행 상태를 함께 관리할 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">마감일 알림 기능</span><p>마감일이 다가오는 할일을 놓치지 않도록 알려줍니다.</p></div>
-      <div class="demo-card"><span class="card-title">진행률 확인 기능</span><p>프로젝트별 할일 완료율을 한눈에 확인할 수 있습니다.</p></div>
-    </div>
-
-    <div class="demo-cards" id="cardsAddress" style="display:none;">
-      <div class="demo-card"><span class="card-title">조직도 연동 기능</span><p>부서, 직급별로 구성원 정보를 체계적으로 확인할 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">빠른 연락 기능</span><p>연락처를 통해 바로 채팅이나 일정 등록으로 이동할 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">그룹 관리 기능</span><p>자주 협업하는 구성원을 그룹으로 묶어 관리할 수 있습니다.</p></div>
-    </div>
-
-    <div class="demo-cards" id="cardsAdmin" style="display:none;">
-      <div class="demo-card"><span class="card-title">구성원 관리 기능</span><p>구성원 초대, 권한 설정을 관리자 페이지에서 처리할 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">사용 현황 통계 기능</span><p>서비스 이용 현황을 통계로 확인할 수 있습니다.</p></div>
-      <div class="demo-card"><span class="card-title">보안 설정 기능</span><p>접근 권한, 로그인 정책 등 보안 옵션을 설정할 수 있습니다.</p></div>
-    </div>
-
-    <!-- 우측 데모 화면 (기능별로 전환) -->
-    <div class="demo-visual">
-
-      <!-- 채팅 -->
-      <div class="visual-panel show" id="visualChat">
-      	<img src="/common/images/visualChat.png" alt="채팅 화면" style="max-width: 100%; height: auto; border-radius: 8px;">
-      </div>
-
-      <!-- 캘린더 -->
-      <div class="visual-panel" id="visualCalendar">
-      	<img src="/common/images/visualCalendar.png" alt="채팅 화면" style="max-width: 100%; height: auto; border-radius: 8px;">
-      </div>
-
-      <!-- 할일 -->
-      <div class="visual-panel" id="visualTask">
-      	<img src="/common/images/visualTask.png" alt="채팅 화면" style="max-width: 100%; height: auto; border-radius: 8px;">
-      </div>
-
-      <!-- 주소록 -->
-      <div class="visual-panel" id="visualAddress">
-      	<img src="/common/images/visualAddress.png" alt="채팅 화면" style="max-width: 100%; height: auto; border-radius: 8px;">
-      </div>
-
-      <!-- 관리자 -->
-      <div class="visual-panel" id="visualAdmin">
-      	<img src="/common/images/visualAdmin.png" alt="채팅 화면" style="max-width: 100%; height: auto; border-radius: 8px;">
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===== Footer ===== -->
-<footer>
-  <div class="footer-left">
-    <span class="copyright">© WORKS</span>
-    <a th:href="@{/policy/privacy}">개인정보처리방침</a>
-    <span class="divider">|</span>
-    <a th:href="@{/policy/terms}">이용약관</a>
-  </div>
-</footer>
-
-<script th:inline="javascript">
-  function toggleSupport() {
-    document.getElementById('supportToggle').classList.toggle('open');
-    document.getElementById('supportDropdown').classList.toggle('show');
-  }
-
-  // 바깥 영역 클릭 시 드롭다운 닫기
-  document.addEventListener('click', function (e) {
-    const toggle = document.getElementById('supportToggle');
-    const dropdown = document.getElementById('supportDropdown');
-    if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
-      toggle.classList.remove('open');
-      dropdown.classList.remove('show');
-    }
-  });
-
-  const featureMap = {
-    chat: { cards: 'cardsChat', visual: 'visualChat' },
-    calendar: { cards: 'cardsCalendar', visual: 'visualCalendar' },
-    task: { cards: 'cardsTask', visual: 'visualTask' },
-    address: { cards: 'cardsAddress', visual: 'visualAddress' },
-    admin: { cards: 'cardsAdmin', visual: 'visualAdmin' }
-  };
-
-  function selectFeature(key, btn) {
-    // 탭 active 처리
-    document.querySelectorAll('.feature-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-
-    // 좌측 카드 전환
-    Object.values(featureMap).forEach(v => {
-      document.getElementById(v.cards).style.display = 'none';
-      document.getElementById(v.visual).classList.remove('show');
-    });
-    document.getElementById(featureMap[key].cards).style.display = 'flex';
-    document.getElementById(featureMap[key].visual).classList.add('show');
-  }
-</script>
-
+<!-- footer -->
+<footer th:replace="~{ fragments/all :: footer }"></footer>
 </body>
 </html>

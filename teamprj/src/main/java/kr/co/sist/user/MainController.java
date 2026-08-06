@@ -17,10 +17,17 @@ public class MainController {
 		return "policy/privacy";
 	}
 	
-	@GetMapping("policy/terms")
-	public String showTerms() {
+	@GetMapping("/policy/terms")
+	public String showterms() {
 		return "policy/terms";
 	}
+	
+	@GetMapping("/user/inquiry")
+	public String showInquiry() {
+		return "user/inquiry";
+	}
+	
+
 	
 	@GetMapping("user/addressBook")
 	public String showTodo() {
