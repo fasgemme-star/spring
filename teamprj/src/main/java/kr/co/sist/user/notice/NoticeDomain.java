@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class NoticeDTO {
+public class NoticeDomain {
 	private String noticeNo, noticeTitle, content, files;
 	private LocalDateTime createdDate;
 

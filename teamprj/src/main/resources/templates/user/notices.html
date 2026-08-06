@@ -326,6 +326,10 @@ footer .divider { color: #555; }
   <h1 class="page-title">공지사항</h1>
 
   <div class="notice-list">
+    <div class="notice-item" th:each="notice : ${notices}">
+      <a class="row" th:href="@{/notice/{id}(id=${notice.id})}">
+        <span th:text="${notice.title}">공지 제목</span>
+        <span class="chevron">⌄</span>
       </a>
     </div>
   </div>

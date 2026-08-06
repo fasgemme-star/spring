@@ -1,5 +1,6 @@
 package kr.co.sist.user.notice;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,15 +8,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class NoticeController {
 	
-	@GetMapping("user/notice")
+	@Autowired
+	private NoticeService ns;
+	
+	@GetMapping("user/notices")
 	public String showNotice(Model model) {
-		return "user/notice";
+		model.addAttribute("notices", ns.getNoticeList());
+		return "user/notices";
 	}
 	
 	@GetMapping("notice")
 	public String showNoticeDetail(Model model, String noticeNo) {
-		return "";
+		model.addAttribute("notice", ns.getNoticeDetail(noticeNo));
+		return "user/notice";
 	}
-	
 
 }

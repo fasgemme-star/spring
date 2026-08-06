@@ -22,17 +22,5 @@ public class MainController {
 		return "policy/terms";
 	}
 	
-	@GetMapping("/user/inquiry")
-	public String showInquiry() {
-		return "user/inquiry";
-	}
-	
-
-	
-	@GetMapping("user/addressBook")
-	public String showTodo() {
-		return "user/addressBook";
-	}
-	
 	
 }
