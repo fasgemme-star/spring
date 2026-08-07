@@ -25,7 +25,7 @@ public class AddressController {
 	}
 	
 	@GetMapping("toggleFavorite")
-	public String changeFavoriteAddr(HttpSession session, String userNo) {
+	public String modifyBookmark(HttpSession session, String userNo) {
 		return "user/addressBook";
 	}
 
