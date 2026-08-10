@@ -1,4 +1,4 @@
-package kr.co.sist.user.inquiry;
+package kr.co.sist.inquiry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ public class InquiryController {
 	
 	@GetMapping("user/inquiry")
 	public String showInquiry() {
-		return "user/inquiry";
+		return "inquiry/inquiry";
 	}
 	
 	@GetMapping("inquiry")

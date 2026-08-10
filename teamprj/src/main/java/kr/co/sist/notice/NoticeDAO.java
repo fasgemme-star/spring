@@ -1,4 +1,4 @@
-package kr.co.sist.user.notice;
+package kr.co.sist.notice;
 
 import java.util.List;
 

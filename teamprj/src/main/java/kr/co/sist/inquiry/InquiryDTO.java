@@ -1,4 +1,4 @@
-package kr.co.sist.user.inquiry;
+package kr.co.sist.inquiry;
 
 import lombok.Data;
 

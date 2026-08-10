@@ -4,18 +4,26 @@
 <meta charset="UTF-8">
 <title>공지사항 - WORKS</title>
 <link rel="stylesheet" th:href="@{/common/css/works.css}" />
+
 </head>
 <body>
 <!-- ===== Header ===== -->
 <div th:replace="~{ fragments/all :: header }"></div>
+
 <!-- ===== Sub banner + 고객센터 드롭다운 ===== -->
 <div th:replace="~{ fragments/all :: subBanner }"></div>
 <!-- ===== 주요 기능 ===== -->
 
 <main class="notice-container">
-	<h1 class="page-title">이용약관</h1>
-	<div class="terms-list">
-	    <img th:src="@{/common/images/terms.png}" id="terms"/>
+  <h1 class="page-title">공지사항</h1>
+
+  <div class="notice-list">
+    <div class="notice-item" th:each="notice : ${notices}">
+      <a class="row" th:href="@{/notice/{id}(id=${notice.id})}">
+        <span th:text="${notice.title}">공지 제목</span>
+        <span class="chevron">⌄</span>
+      </a>
+    </div>
   </div>
 </main>
 

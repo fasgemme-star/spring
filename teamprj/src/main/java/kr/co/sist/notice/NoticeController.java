@@ -1,4 +1,4 @@
-package kr.co.sist.user.notice;
+package kr.co.sist.notice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,13 +14,13 @@ public class NoticeController {
 	@GetMapping("user/notices")
 	public String showNotice(Model model) {
 		model.addAttribute("notices", ns.getNoticeList());
-		return "user/notices";
+		return "notice/notices";
 	}
 	
 	@GetMapping("notice")
 	public String showNoticeDetail(Model model, String noticeNo) {
 		model.addAttribute("notice", ns.getNoticeDetail(noticeNo));
-		return "user/notice";
+		return "notice/notice";
 	}
 
 }

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>할 일 관리</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome (아이콘) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 커스텀 스크롤바 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        
+        /* 사진에 맞는 원형 체크박스 커스텀 */
+        .circle-checkbox {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            background-color: white;
+            transition: all 0.2s;
+        }
+        .circle-checkbox:hover { border-color: #3b82f6; }
+        .circle-checkbox:checked {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        .circle-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 5px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+        }
+
+        /* 네모 체크박스 커스텀 (테일윈드 폼 플러그인 대체용) */
+        .square-checkbox {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 1.5px solid #d1d5db;
+            cursor: pointer;
+            accent-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{ fragments/todo :: user-header }"></div>
+<div class="flex h-screen bg-white text-gray-800 font-sans overflow-hidden">
+    <!-- ==========================================
+         1. 좌측 사이드바 (메뉴)
+         ========================================== -->
+    <aside class="w-64 border-r border-gray-200 flex flex-col shrink-0">
+        <div class="p-4">
+            <!-- 할 일 쓰기 버튼 -->
+            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-md mb-6 transition">
+                할일 쓰기
+            </button>
+
+            <!-- 메뉴 리스트 -->
+            <ul class="space-y-1 text-sm">
+                <li class="text-xs font-semibold text-gray-400 mb-2 px-3">내 할일</li>
+                <li>
+                    <a th:href="@{todo}" class="flex items-center gap-2 px-3 py-2 rounded bg-blue-50 text-blue-600 font-medium">
+                        <i class="fa-regular fa-circle-check"></i> 전체 할일
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{todo?userNo=111&representativNo=222}" class="flex items-center gap-2 px-3 py-2 rounded text-gray-600 hover:bg-gray-100">
+                        <i class="fa-regular fa-user"></i> 담당 할일
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{todo?userNo=111}" class="flex items-center gap-2 px-3 py-2 rounded text-gray-600 hover:bg-gray-100">
+                        <i class="fa-solid fa-user-pen"></i> 요청 할일
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- ==========================================
+         2. 중앙/우측 메인 콘텐츠 영역
+         ========================================== -->
+    <div class="flex-1 flex flex-col min-w-0">
+        
+        <!-- 하단 영역 (목록 + 우측 상세) -->
+        <div class="flex-1 flex overflow-hidden">
+            
+            <!-- 2-1. 중앙 리스트 영역 -->
+            <main class="flex-1 flex flex-col bg-white overflow-y-auto">
+                
+                <!-- 리스트 컨트롤 (전체선택 & 삭제 & 카운트) -->
+                <div class="flex items-center gap-4 px-8 py-4 border-b border-gray-100">
+                    <input type="checkbox" id="selectAll" class="square-checkbox shrink-0">
+                    <button class="text-sm font-medium text-gray-400 border border-gray-200 px-3 py-1.5 rounded-md hover:bg-gray-50 hover:text-gray-600 transition">삭제</button>
+                    
+                    <div class="text-sm text-gray-600 font-medium ml-2">
+                        <span class="text-blue-600 font-bold">미완료 4</span> / 전체 4
+                    </div>
+                </div>
+
+                <!-- 빠른 생성 (Quick Add) 바 -->
+                <div class="px-8 py-4 flex gap-3 items-center">
+                    <div class="flex-1 relative">
+                        <input type="text" placeholder="새로운 할 일을 생성해보세요." 
+                               class="w-full border border-gray-200 rounded-md px-4 py-2 text-sm pr-10 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <i class="fa-regular fa-calendar"></i>
+                        </button>
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md text-sm transition">
+                        저장
+                    </button>
+                </div>
+
+                <!-- 할일 리스트 묶음 -->
+                <div class="px-8 pb-8">
+                    <!-- 할일 아이템 반복 영역 -->
+                    <div class="flex flex-col">
+                        
+                        <!-- 아이템 1 (todo-item 클래스 추가됨) -->
+                        <div class="todo-item group flex items-start gap-3 py-3.5 border-b border-transparent hover:bg-gray-50/50 cursor-pointer rounded-lg px-2 -mx-2 transition">
+                            <input type="checkbox" class="item-checkbox square-checkbox mt-0.5 shrink-0">
+                            <input type="checkbox" class="circle-checkbox mt-0.5 shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-[14px] font-semibold text-gray-800 mb-1 leading-tight">할일</h3>
+                                <p class="text-[12px] text-gray-500">기한 : 내일 · 담당자 : 이원석</p>
+                            </div>
+                            <div class="flex gap-4 text-gray-300 px-2 transition-opacity">
+                                <button class="hover:text-yellow-400"><i class="fa-regular fa-star"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- 아이템 2 -->
+                        <div class="todo-item group flex items-start gap-3 py-3.5 border-b border-transparent hover:bg-gray-50/50 cursor-pointer rounded-lg px-2 -mx-2 transition">
+                            <input type="checkbox" class="item-checkbox square-checkbox mt-0.5 shrink-0">
+                            <input type="checkbox" class="circle-checkbox mt-0.5 shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-[14px] font-semibold text-gray-800 mb-1 leading-tight">요청 할 일 테스트</h3>
+                                <p class="text-[12px] text-gray-500">기한 : 2026. 7. 20. · 담당자 : 최유정</p>
+                            </div>
+                            <div class="flex gap-4 text-gray-300 px-2 transition-opacity">
+                                <button class="hover:text-yellow-400 text-yellow-400"><i class="fa-solid fa-star"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+
+            <!-- 2-2. 우측 빈 화면 (기본 상태) -->
+            <aside id="detailEmptyPanel" class="flex w-[450px] bg-white border-l border-gray-100 flex-col items-center justify-center p-8 shrink-0">
+                <div class="text-gray-200 mb-4">
+                    <i class="fa-solid fa-file-lines text-6xl"></i>
+                </div>
+                <h3 class="text-base font-bold text-gray-800 mb-2">선택된 할 일이 없습니다.</h3>
+                <p class="text-sm text-gray-400">할 일을 선택하면 할 일의 상세 내용을 확인할 수 있습니다.</p>
+            </aside>
+
+            <!-- 2-3. 우측 상세 정보 패널 (숨김 상태로 시작) -->
+            <aside id="detailPanel" class="hidden w-[450px] bg-white border-l border-gray-100 flex-col shrink-0 h-full overflow-y-auto">
+                <div class="p-7">
+                    <!-- 상단 헤더 -->
+                    <div class="flex items-center justify-between mb-4 text-gray-500">
+                        <span class="text-[13px] font-bold">미완료된 할 일</span>
+                        <button class="hover:text-gray-700 transition-colors">
+                            <i class="fa-solid fa-paperclip text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- 타이틀 및 내용 -->
+                    <div class="mb-5">
+                        <h2 class="text-xl font-bold text-gray-900 mb-2">요청 할 일 테스트</h2>
+                        <p class="text-[14px] text-gray-500">테스트</p>
+                    </div>
+
+                    <hr class="border-gray-100 my-6">
+
+                    <!-- 속성(기한, 요청자, 담당자) -->
+                    <div class="flex flex-col gap-4 mb-7">
+                        <div class="flex items-center text-[14px]">
+                            <span class="w-16 text-gray-500 font-medium">기한</span>
+                            <span class="text-gray-800">2026. 7. 20. 월요일</span>
+                        </div>
+                        <div class="flex items-center text-[14px]">
+                            <span class="w-16 text-gray-500 font-medium">요청자</span>
+                            <span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-md text-xs font-semibold">이원석</span>
+                        </div>
+                        <div class="flex items-center text-[14px]">
+                            <span class="w-16 text-gray-500 font-medium">담당자</span>
+                            <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-md text-xs font-semibold">최유정</span>
+                        </div>
+                    </div>
+
+                    <!-- 완료하기 버튼 -->
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg mb-8 transition shadow-sm">
+                        완료하기
+                    </button>
+
+                    <!-- 작업 내역 영역 -->
+                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                        <h3 class="text-[14px] font-bold text-gray-800 mb-5">작업 내역 <span class="text-blue-600 font-bold">6</span></h3>
+                        
+                        <div class="flex flex-col gap-4">
+                            <!-- 작업 내역 1 -->
+                            <div class="border-b border-gray-200/60 pb-4">
+                                <p class="text-[11.5px] text-gray-400 mb-1">2026. 7. 16. 오후 03:35</p>
+                                <p class="text-[13.5px] text-gray-700">이원석님이 할 일을 <span class="font-bold text-gray-900">미완료</span>로 변경했습니다.</p>
+                            </div>
+                            <!-- 작업 내역 2 -->
+                            <div class="border-b border-gray-200/60 pb-4">
+                                <p class="text-[11.5px] text-gray-400 mb-1">2026. 7. 16. 오후 03:35</p>
+                                <p class="text-[13.5px] text-gray-700">이원석님이 할 일을 <span class="font-bold text-gray-900">완료</span>했습니다.</p>
+                            </div>
+                            <!-- 작업 내역 3 -->
+                            <div class="border-b border-gray-200/60 pb-4">
+                                <p class="text-[11.5px] text-gray-400 mb-1">2026. 7. 16. 오후 03:35</p>
+                                <p class="text-[13.5px] text-gray-700">이원석님이 이원석님을 담당자에서 <span class="font-bold text-gray-900">제외</span>했습니다.</p>
+                            </div>
+                            <!-- 작업 내역 4 -->
+                            <div>
+                                <p class="text-[11.5px] text-gray-400 mb-1">2026. 7. 16. 오후 03:35</p>
+                                <p class="text-[13.5px] text-gray-700">이원석님이 최유정님을 담당자로 <span class="font-bold text-gray-900">추가</span>했습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+        </div>
+    </div>
+</div>
+
+<!-- 스크립트 영역 -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- 1. 전체선택 체크박스 로직 ---
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+
+        selectAllCheckbox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            itemCheckboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        itemCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
+                const someChecked = Array.from(itemCheckboxes).some(cb => cb.checked);
+                
+                selectAllCheckbox.checked = allChecked;
+                selectAllCheckbox.indeterminate = someChecked && !allChecked;
+            });
+        });
+
+        // --- 2. 상세 정보 패널 토글 로직 ---
+        const todoItems = document.querySelectorAll('.todo-item');
+        const emptyPanel = document.getElementById('detailEmptyPanel');
+        const detailPanel = document.getElementById('detailPanel');
+
+        todoItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                // 체크박스나 아이콘 버튼 클릭 시에는 패널이 열리지 않도록 예외 처리
+                if (e.target.closest('input[type="checkbox"]') || e.target.closest('button')) {
+                    return; 
+                }
+
+                // 클릭된 항목 하이라이트 표시
+                todoItems.forEach(el => el.classList.remove('bg-gray-50'));
+                item.classList.add('bg-gray-50');
+
+                // 빈 화면 숨기고 상세 패널 표시
+                emptyPanel.classList.remove('flex');
+                emptyPanel.classList.add('hidden');
+                
+                detailPanel.classList.remove('hidden');
+                detailPanel.classList.add('flex');
+            });
+        });
+    });
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- 3. 별(즐겨찾기) 토글 로직 추가 ---
+        const starIcons = document.querySelectorAll('.todo-item .fa-star');
+        
+        starIcons.forEach(icon => {
+            const btn = icon.closest('button');
+            
+            btn.addEventListener('click', (e) => {
+                // 상위 엘리먼트(.todo-item)로 클릭 이벤트가 전파되는 것을 막아줍니다.
+                e.stopPropagation(); 
+                
+                // 현재 빈 별(fa-regular) 상태인 경우 -> 꽉 찬 별(fa-solid)로 변경
+                if (icon.classList.contains('fa-regular')) {
+                    icon.classList.remove('fa-regular');
+                    icon.classList.add('fa-solid');
+                    btn.classList.add('text-yellow-400');
+                } 
+                // 현재 꽉 찬 별(fa-solid) 상태인 경우 -> 빈 별(fa-regular)로 변경
+                else {
+                    icon.classList.remove('fa-solid');
+                    icon.classList.add('fa-regular');
+                    btn.classList.remove('text-yellow-400');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

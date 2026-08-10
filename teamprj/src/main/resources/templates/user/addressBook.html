@@ -8,86 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-        
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f9fafb;
-        }
-
-        /* 커스텀 스크롤바 */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d1d5db; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #9ca3af; 
-        }
-
-        /* 테이블 로우 호버 및 선택 상태 */
-        .table-row-hover:hover {
-            background-color: #f3f4f6;
-            cursor: pointer;
-        }
-        .table-row-selected {
-            background-color: #eff6ff !important;
-        }
-
-        /* 체크박스 커스텀 */
-        .custom-checkbox {
-            width: 1rem;
-            height: 1rem;
-            border-radius: 0.25rem;
-            border: 1px solid #d1d5db;
-            appearance: none;
-            cursor: pointer;
-            outline: none;
-        }
-        .custom-checkbox:checked {
-            background-color: #3b82f6;
-            border-color: #3b82f6;
-            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/common/css/addressBook.css}">
+    <script th:src="@{/common/js/addressBook.js}"></script>
 </head>
 <body class="h-screen flex flex-col overflow-hidden text-gray-800 text-sm">
 
-    <!-- Header -->
-    <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0 z-10 relative">
-        <div class="flex items-center gap-6">
-            <div class="flex items-center gap-2 text-teal-500 font-bold text-lg">
-                <i class="fa-solid fa-address-book"></i>
-                <span class="text-gray-800">주소록</span>
-            </div>
-            
-            <div class="relative w-96">
-                <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                <input type="text" placeholder="연락처, 태그 검색" class="w-full bg-gray-100 border-none rounded-full py-1.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-100 text-sm">
-            </div>
-        </div>
-
-        <div class="flex items-center gap-4 text-gray-500 text-lg">
-            <button class="hover:text-blue-500 text-blue-500"><i class="fa-solid fa-house"></i></button>
-            <button class="hover:text-green-500 text-green-500"><i class="fa-solid fa-envelope"></i></button>
-            <button class="hover:text-blue-400 text-blue-400"><i class="fa-solid fa-calendar-check"></i></button>
-            <button class="hover:text-purple-500 text-purple-500"><i class="fa-solid fa-clipboard-list"></i></button>
-            <div class="w-px h-4 bg-gray-300 mx-1"></div>
-            <button class="hover:text-gray-700"><i class="fa-solid fa-grip"></i></button>
-            <button class="hover:text-gray-700"><i class="fa-regular fa-bell"></i></button>
-            <button class="hover:text-gray-700"><i class="fa-solid fa-sitemap"></i></button>
-            <button class="hover:text-gray-700"><i class="fa-solid fa-gear"></i></button>
-            <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm ml-2 cursor-pointer">윤</div>
-        </div>
-    </header>
-
+	<!-- Header -->
+	<div th:replace="~{ fragments/addr :: user-header }"></div>
     <!-- Main Layout -->
     <div class="flex flex-1 overflow-hidden">
         
@@ -103,45 +30,47 @@
                     <span class="text-xs">그룹</span>
                 </button>
             </div>
-            
-            <div class="flex-1 overflow-y-auto py-2">
-                <!-- 조직도 Tree -->
-                <div class="px-2">
-                    <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-700">
-                        <i class="fa-solid fa-caret-down text-gray-400"></i>
-                        <span>조직도</span>
-                    </div>
-                    
-                    <div class="pl-4">
-                        <div class="flex items-center gap-2 px-2 py-1.5 bg-blue-50 text-blue-600 rounded cursor-pointer font-medium">
-                            <i class="fa-solid fa-caret-down"></i>
-                            <i class="fa-regular fa-building"></i>
-                            <span>연습</span>
-                        </div>
-                        
-                        <div class="pl-6 mt-1">
-                            <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
-                                <i class="fa-solid fa-user-group text-gray-400"></i>
-                                <span>1</span>
-                            </div>
-                            <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
-                                <i class="fa-solid fa-user-group text-gray-400"></i>
-                                <span>2</span>
-                            </div>
-                            <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
-                                <i class="fa-solid fa-user-group text-gray-400"></i>
-                                <span>3</span>
-                            </div>
-                            <div class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
-                                <i class="fa-solid fa-users-line text-gray-400"></i>
-                                <span>그룹</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Footer text in sidebar -->
+
+			<div class="flex-1 overflow-y-auto py-2">
+				<!-- 조직도 Tree -->
+				<div class="px-2">
+					<!-- 1. 조직도 버튼 -->
+					<div onclick="toggleMenu(this)"
+						class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-700">
+						<!-- 아이콘에 회전 애니메이션을 위한 클래스(transition-transform duration-200) 추가 -->
+						<i
+							class="fa-solid fa-caret-down text-gray-400 transition-transform duration-200"></i>
+						<span>조직도</span>
+					</div>
+
+					<!-- 조직도 하위 영역 -->
+					<div class="pl-4">
+						<!-- 2. 연습 버튼 -->
+						<div onclick="toggleMenu(this)"
+							class="flex items-center gap-2 px-2 py-1.5 bg-blue-50 text-blue-600 rounded cursor-pointer font-medium mt-1">
+							<!-- 아이콘에 회전 애니메이션 클래스 추가 -->
+							<i
+								class="fa-solid fa-caret-down transition-transform duration-200"></i>
+							<i class="fa-regular fa-building"></i> <span>연습</span>
+						</div>
+
+						<!-- 연습 하위 영역 -->
+						<div class="pl-6 mt-1">
+							<div 
+								class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
+								<i class="fa-solid fa-user-group text-gray-400"></i> <span>1</span>
+							</div>
+						</div>
+							<div
+								class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
+								<i class="fa-solid fa-users-line text-gray-400"></i> <span>그룹</span>
+							</div>
+						
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer text in sidebar -->
             <div class="p-4 text-[10px] text-gray-400 border-t border-gray-100">
                 © NAVER Cloud Corp.
             </div>
@@ -301,77 +230,6 @@
         </aside>
     </div>
 
-    <!-- JavaScript for Interactions -->
-    <script>
-        // 별 아이콘(즐겨찾기) 토글
-        function toggleStar(element) {
-            const icon = element.querySelector('i');
-            if (icon.classList.contains('fa-regular')) {
-                icon.classList.remove('fa-regular', 'text-gray-300');
-                icon.classList.add('fa-solid', 'text-yellow-400');
-            } else {
-                icon.classList.remove('fa-solid', 'text-yellow-400');
-                icon.classList.add('fa-regular', 'text-gray-300');
-            }
-        }
 
-        // 로우 선택 및 우측 상세 패널 열기
-        function selectRow(row, event) {
-            // 다른 로우의 선택 상태 제거
-            document.querySelectorAll('.contact-row').forEach(r => {
-                r.classList.remove('table-row-selected');
-            });
-            // 현재 로우 선택 상태 추가
-            row.classList.add('table-row-selected');
-
-            // 숨겨진 Input 데이터 가져오기
-            const initial = row.querySelector('.data-initial').value;
-            let color = row.querySelector('.data-color').value;
-            const name = row.querySelector('.data-name').value;
-            let title = row.querySelector('.data-title').value;
-            const org = row.querySelector('.data-org').value;
-            const dept = row.querySelector('.data-dept').value;
-            const email = row.querySelector('.data-email').value;
-
-            // 데이터 포맷팅 보정 (빈값 처리)
-            if(!title || title.trim() === '') title = '직급 없음';
-
-            // 우측 패널에 데이터 세팅
-            const avatarElem = document.getElementById('panelAvatar');
-            avatarElem.className = `w-20 h-20 rounded-full text-white flex items-center justify-center font-medium text-3xl shrink-0 ${color}`;
-            avatarElem.innerText = initial;
-            
-            document.getElementById('panelName').innerText = name;
-            document.getElementById('panelTitle').innerText = title;
-            document.getElementById('panelOrg').innerText = org;
-            document.getElementById('panelDept').innerText = dept;
-            
-            // 부서가 없으면 텍스트 숨김 처리
-            const deptTitleWrapper = document.getElementById('panelDeptTitle');
-            if(dept && dept.trim() !== '') {
-                deptTitleWrapper.style.display = 'block';
-            } else {
-                deptTitleWrapper.style.display = 'none';
-            }
-
-            document.getElementById('panelEmail').innerText = email;
-            document.getElementById('panelEmail').href = `mailto:${email}`;
-
-            // 패널 열기 애니메이션
-            const panel = document.getElementById('detailPanel');
-            panel.classList.remove('translate-x-full');
-        }
-
-        // 우측 상세 패널 닫기
-        function closePanel() {
-            const panel = document.getElementById('detailPanel');
-            panel.classList.add('translate-x-full');
-            
-            // 로우 선택 상태 해제
-            document.querySelectorAll('.contact-row').forEach(r => {
-                r.classList.remove('table-row-selected');
-            });
-        }
-    </script>
 </body>
 </html>

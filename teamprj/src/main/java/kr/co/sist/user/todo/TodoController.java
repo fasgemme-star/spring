@@ -13,9 +13,9 @@ public class TodoController {
 	@Autowired
 	private TodoService ts;
 	
-	@GetMapping("Todo")
+	@GetMapping("todo")
 	public String showTodoPage(HttpSession session) {
-		return "";
+		return "user/todo";
 	}
 	
 	public String TodoList(RangeDTO rDTO, HttpSession session) {
