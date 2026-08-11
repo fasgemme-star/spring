@@ -19,9 +19,8 @@
 
   <div class="notice-list">
     <div class="notice-item" th:each="notice : ${notices}">
-      <a class="row" th:href="@{/notice/{id}(id=${notice.id})}">
-        <span th:text="${notice.title}">공지 제목</span>
-        <span class="chevron">⌄</span>
+      <a class="row" th:href="@{/notice/notice?{id}(id=${notice.noticeNo})}">
+        <span th:text="${notice.noticeTitle}">공지 제목</span>
       </a>
     </div>
   </div>

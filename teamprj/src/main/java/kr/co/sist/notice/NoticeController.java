@@ -17,7 +17,7 @@ public class NoticeController {
 		return "notice/notices";
 	}
 	
-	@GetMapping("notice")
+	@GetMapping("notice/notice")
 	public String showNoticeDetail(Model model, String noticeNo) {
 		model.addAttribute("notice", ns.getNoticeDetail(noticeNo));
 		return "notice/notice";

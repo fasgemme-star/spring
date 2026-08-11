@@ -15,10 +15,10 @@
 
 <main class="notice-container">
   <h1 class="page-title">공지사항</h1>
-
   <div class="notice-list">
-      </a>
-    </div>
+	<div th:text="${notice.noticeTitle}"></div>
+	<div th:text="${notice.createdDate}"></div>
+	<div th:text="${notice.content}"></div>
   </div>
 </main>
 

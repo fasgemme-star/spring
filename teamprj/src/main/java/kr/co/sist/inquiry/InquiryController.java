@@ -19,7 +19,7 @@ public class InquiryController {
 	
 	@GetMapping("inquiry")
 	public String addInquiry(MultipartFile mpf , InquiryDTO iDTO, Model model) {
-		is.createInquiry(iDTO);
+		model.addAttribute("msg", is.createInquiry(iDTO));
 		return "";
 	}
 
