@@ -27,7 +27,60 @@
         
         <!-- 좌측 사이드바 생략 (이전 코드와 동일) ... -->
         <aside class="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0">
-            <!-- ... -->
+                <div class="flex p-4 border-b border-gray-100">
+                <button class="flex-1 flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-gray-800">
+                    <i class="fa-regular fa-star text-lg"></i>
+                    <span class="text-xs">즐겨찾기</span>
+                </button>
+                <button class="flex-1 flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-gray-800 border-l border-gray-100">
+                    <i class="fa-solid fa-users text-lg"></i>
+                    <span class="text-xs">그룹</span>
+                </button>
+            </div>
+
+			<div class="flex-1 overflow-y-auto py-2">
+				<!-- 조직도 Tree -->
+				<div class="px-2">
+					<!-- 1. 조직도 버튼 -->
+					<div onclick="toggleMenu(this)"
+						class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-700">
+						<!-- 아이콘에 회전 애니메이션을 위한 클래스(transition-transform duration-200) 추가 -->
+						<i
+							class="fa-solid fa-caret-down text-gray-400 transition-transform duration-200"></i>
+						<span>조직도</span>
+					</div>
+
+					<!-- 조직도 하위 영역 -->
+					<div class="pl-4">
+						<!-- 2. 연습 버튼 -->
+						<div onclick="toggleMenu(this)"
+							class="flex items-center gap-2 px-2 py-1.5 bg-blue-50 text-blue-600 rounded cursor-pointer font-medium mt-1">
+							<!-- 아이콘에 회전 애니메이션 클래스 추가 -->
+							<i
+								class="fa-solid fa-caret-down transition-transform duration-200"></i>
+							<i class="fa-regular fa-building"></i> <span>연습</span>
+						</div>
+
+						<!-- 연습 하위 영역 -->
+						<div class="pl-6 mt-1">
+							<div 
+								class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
+								<i class="fa-solid fa-user-group text-gray-400"></i> <span>1</span>
+							</div>
+						</div>
+							<div
+								class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
+								<i class="fa-solid fa-users-line text-gray-400"></i> <span>그룹</span>
+							</div>
+						
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer text in sidebar -->
+            <div class="p-4 text-[10px] text-gray-400 border-t border-gray-100">
+                © NAVER Cloud Corp.
+            </div>
         </aside>
 
         <!-- 우측 리스트 영역 -->
