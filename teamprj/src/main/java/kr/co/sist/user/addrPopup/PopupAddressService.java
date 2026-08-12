@@ -10,21 +10,21 @@ import org.springframework.stereotype.Service;
 public class PopupAddressService {
 	
 	@Autowired
-    private PopupAddressDAO paDAO;
+    private PopupAddressMapper pam;
 
     // 주소록 조회
     public List<UserDomain> getAddressList(RangeDTO rDTO) {
-        return paDAO.selectAddressList(rDTO);
+        return pam.selectAddressList(rDTO);
     }
 
     // 그룹 조회
-    public List<GroupsDomain> getGroup(String companyNo) {
-        return paDAO.selectGroup(companyNo);
+    public List<GroupsDomain> getGroup(String userNo) {
+        return pam.selectGroup(userNo);
     }
 
     // 조직 조회
-    public List<OrganizationDomain> getOrganization(String companyNo) {
-        return paDAO.selectOrganization(companyNo);
+    public List<OrganizationDomain> getOrganization(String userNo) {
+        return pam.selectOrganization(userNo);
     }
 
     // 선택된 멤버 조회

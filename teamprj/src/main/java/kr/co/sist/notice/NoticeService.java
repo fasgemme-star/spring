@@ -9,17 +9,15 @@ import org.springframework.stereotype.Service;
 public class NoticeService {
 	
 	@Autowired
-	private NoticeDAO nDAO;
+	private NoticeMapper nm;
 	
 	public List<NoticeDomain> getNoticeList(){
-		List<NoticeDomain> list = null;
-		list = nDAO.selectNotice();
+		List<NoticeDomain> list = nm.selectNotice();
 		return list;
 	}
 	
 	public NoticeDomain getNoticeDetail(String noticeNo) {
-		NoticeDomain nd = null;
-		nd = nDAO.selectNoticeDetail(noticeNo);
+		NoticeDomain nd = nm.selectNoticeDetail(noticeNo);
 		return nd;
 	}
 

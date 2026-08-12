@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 <!-- Thymeleaf 네임스페이스 추가 -->
+<!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,7 @@
     <title>주소록</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <script th:src="@{/common/js/addressBook.js}"></script>
     <style>
         html, body { height: 100%; margin: 0; }
     </style>
@@ -63,14 +64,14 @@
 
 						<!-- 연습 하위 영역 -->
 						<div class="pl-6 mt-1">
-							<div 
+							<div th:each="organization : ${organizations}"
 								class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
-								<i class="fa-solid fa-user-group text-gray-400"></i> <span>1</span>
+								<i class="fa-solid fa-user-group text-gray-400"></i> <span th:text="${organization.organizationName}"></span>
 							</div>
 						</div>
-							<div
+							<div th:each="group : ${groups}"
 								class="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer text-gray-600">
-								<i class="fa-solid fa-users-line text-gray-400"></i> <span>그룹</span>
+								<i class="fa-solid fa-users-line text-gray-400"></i> <span th:text="${group.groupsName}">그룹</span>
 							</div>
 						
 					</div>
@@ -98,25 +99,25 @@
             <div class="overflow-y-auto flex-1 p-6 space-y-4">
                 
                 <!-- 데이터가 없을 경우 (th:if) -->
-                <div th:if="${#lists.isEmpty(userList)}" class="text-center text-gray-500 py-10">
+                <div th:if="${#lists.isEmpty(users)}" class="text-center text-gray-500 py-10">
                     등록된 사원이 없습니다.
                 </div>
 
                 <!-- Thymeleaf 반복문 (th:each) 적용 -->
-                <div th:each="user : ${userList}" class="flex items-center gap-4">
+                <div th:each="user : ${users}" class="flex items-center gap-4">
                     <!-- 체크박스 value에 사원 이메일이나 ID 매핑 -->
                     <input type="checkbox" th:value="${user.email}" class="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500">
                     
                     <!-- 프로필 동적 렌더링: 색상 클래스 추가(th:classappend), 이름 첫 글자 자르기(substring) -->
                     <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg"
-                         th:classappend="${user.profileColor != null ? user.profileColor : 'bg-gray-400'}"
-                         th:text="${#strings.substring(user.name, 0, 1)}">이</div>
+                         th:classappend="${user.profileImage != null ? user.profileImage : 'bg-gray-400'}"
+                         th:text="${#strings.substring(user.userName, 0, 1)}">이</div>
                     
                     <div class="flex flex-col">
                         <!-- 사원 이름 출력 -->
-                        <span class="text-sm font-bold text-gray-800" th:text="${user.name}">이름</span>
+                        <span class="text-sm font-bold text-gray-800" th:text="${user.userName}">이름</span>
                         <!-- 부서명과 이메일 합쳐서 출력 -->
-                        <span class="text-xs text-gray-500 mt-0.5" th:text="${user.department + ' ' + user.email}">메일</span>
+                        <span class="text-xs text-gray-500 mt-0.5" th:text="${user.rankName + ' ' + user.organizaionName + ' ' + user.email}">메일</span>
                     </div>
                 </div>
 

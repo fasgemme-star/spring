@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.user.addrPopup.PopupAddressMapper">
+	<select id="selectAddressList" parameterType="addrPopupRangeDTO" resultType="addrPopupUserDomain">
+	select U.USER_NO userNo, U.USER_NAME userName, U.EMAIL email, U.PROFILEIMAGE profileImage, R.RANK_NAME rankName, P.POSITION_NAME positionName, O.ORGANIZATION_NAME organizaionName
+	FROM USERS U
+	LEFT JOIN TITLE T ON U.USER_NO = T.USER_NO
+	LEFT JOIN RANK R ON T.RANK_NO = R.RANK_NO
+	LEFT JOIN POSITION P ON T.POSITION_NO = P.POSITION_NO
+	LEFT JOIN ORGANIZATION O ON U.USER_NO = O.USER_NO
+	WHERE U.COMPANY_NO = #{ companyNo }
+	</select>
+	
+	<select id="selectGroup" parameterType="String" resultType="addrPopupGroupsDomain">
+	SELECT GROUPS_NO groupsNo, GROUPS_NAME groupsName
+	FROM GROUPS
+	WHERE GROUPS_NO IN
+	(SELECT GROUPS_NO
+	FROM GROUPSMEMBER
+	WHERE GRP_MEMBER_NO = #{ userNo })
+	</select>
+	
+	<select id="selectOrganization" parameterType="String" resultType="addrPopupOrganizationDomain">
+	SELECT ORGANIZATION_NO organizationNo, ORGANIZATION_NAME organizationName
+	FROM ORGANIZATION
+	WHERE ORGANIZATION_NO IN
+	(SELECT ORGANIZATION_NO
+	FROM ORGANIZATIONMEMBER
+	WHERE ORGMEMBER_NO = #{ userNo })
+	</select>
+
+</mapper>
