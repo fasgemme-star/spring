@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface PopupAddressMapper {
-	List<UserDomain> selectAddressList(RangeDTO rDTO);
+	public List<UserDomain> selectAddressList(RangeDTO rDTO);
 
-	List<GroupsDomain> selectGroup(String userNo);
+	public List<GroupsDomain> selectGroup(String userNo);
 
-	List<OrganizationDomain> selectOrganization(String userNo);
+	public 	List<OrganizationDomain> selectOrganization(String userNo);
 }

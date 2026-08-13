@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.user.address.AddressMapper">
+	<select id="selectAddressList" parameterType="addressRangeDTO" resultType="addressUserDomain">
+	select U.USER_NO userNo, U.USER_NAME userName, U.EMAIL email, U.PROFILEIMAGE profileImage, R.RANK_NAME rankName, P.POSITION_NAME positionName, O.ORGANIZATION_NAME organizaionName
+	FROM USERS U
+	LEFT JOIN TITLE T ON U.USER_NO = T.USER_NO
+	LEFT JOIN RANK R ON T.RANK_NO = R.RANK_NO
+	LEFT JOIN POSITION P ON T.POSITION_NO = P.POSITION_NO
+	LEFT JOIN ORGANIZATION O ON U.USER_NO = O.USER_NO
+	WHERE U.COMPANY_NO = #{ companyNo }
+	</select>
+	
+	<select id="selectGroup" parameterType="String" resultType="addressGroupsDomain">
+	SELECT GROUPS_NO groupsNo, GROUPS_NAME groupsName
+	FROM GROUPS
+	WHERE GROUPS_NO IN
+	(SELECT GROUPS_NO
+	FROM GROUPSMEMBER
+	WHERE GRP_MEMBER_NO = #{ userNo })
+	</select>
+	
+	<select id="selectOrganization" parameterType="String" resultType="addressOrganizationDomain">
+	SELECT ORGANIZATION_NO organizationNo, ORGANIZATION_NAME organizationName
+	FROM ORGANIZATION
+	WHERE ORGANIZATION_NO IN
+	(SELECT ORGANIZATION_NO
+	FROM ORGANIZATIONMEMBER
+	WHERE ORGMEMBER_NO = #{ userNo })
+	</select>
+	
+	<select id="selectAddressDetail" parameterType="String" resultType="addressUserDomain">
+	SELECT U.USER_NAME userName, U.EMAIL email, U.PROFILEIMAGE profileImage, R.RANK_NAME rankName, P.POSITION_NAME positionName, O.ORGANIZATION_NAME organizaionName, COMPANY_NAME companyName
+	FROM USERS U
+	LEFT JOIN COMPANY C ON U.COMPANY_NO = C.COMPANY_NO
+	LEFT JOIN TITLE T ON U.USER_NO = T.USER_NO
+	LEFT JOIN RANK R ON T.RANK_NO = R.RANK_NO
+	LEFT JOIN POSITION P ON T.POSITION_NO = P.POSITION_NO
+	LEFT JOIN ORGANIZATION O ON U.USER_NO = O.USER_NO
+	WHERE U.USER_NO = #{ userNo }
+	</select>
+	
+	<insert id="insertBookmark" parameterType="addressUserDTO">
+	INSERT INTO ADDRBOOKMARK(TARGET_NO, USER_NO) VALUES(#{ userNo }, #{ targetNo })
+	</insert>
+	
+	<delete id="deleteBookmark" parameterType="addressUserDTO">
+	DELETE FROM ADDRBOOKMARK WHERE TARGET_NO = #{ targetNo } AND USER_NO = #{ userNo }
+	</delete>
+
+</mapper>

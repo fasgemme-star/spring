@@ -11,6 +11,7 @@
     <link rel="stylesheet" th:href="@{/common/css/addressBook.css}">
     <script th:src="@{/common/js/addressBook.js}"></script>
 </head>
+
 <body class="h-screen flex flex-col overflow-hidden text-gray-800 text-sm">
 
 	<!-- Header -->
@@ -104,7 +105,7 @@
                             <th class="w-10 px-2 py-3 text-center"></th>
                             <th class="px-4 py-3 cursor-pointer hover:text-gray-800">이름 <i class="fa-solid fa-sort text-gray-300 ml-1"></i></th>
                             <th class="px-4 py-3">직책/직급</th>
-                            <th class="px-4 py-3">부서</th>
+                            <th class="px-4 py-3">조직</th>
                             <th class="px-4 py-3 cursor-pointer hover:text-gray-800">소속 <i class="fa-solid fa-filter text-gray-300 ml-1"></i></th>
                             <th class="px-4 py-3 cursor-pointer hover:text-gray-800">이메일 <i class="fa-solid fa-filter text-gray-300 ml-1"></i></th>
                             <th class="px-4 py-3 cursor-pointer hover:text-gray-800">전화번호 <i class="fa-solid fa-filter text-gray-300 ml-1"></i></th>
@@ -115,17 +116,9 @@
                         <!-- 실제 연동 시 th:each="contact : ${contacts}" 를 사용합니다. 
                              현재는 프론트엔드 확인을 위해 더미 데이터를 Thymeleaf 문법으로 처리해두었습니다. -->
                         <tr class="border-b border-gray-100 table-row-hover contact-row" 
-                            th:each="contact, iterStat : ${#numbers.sequence(1, 5)}"
+                            th:each="user : ${users}"
                             onclick="selectRow(this, event)">
                             
-                            <!-- Static Demo Data Switch (서버 연동 전 더미 표현을 위한 로직) -->
-                            <th:block th:switch="${iterStat.count}">
-                                <th:block th:case="1" th:with="name='12', initial='1', title='사원 / 아르바이트', dept='1', org='연습', email='test1@practice-6.by-works.net', color='bg-indigo-500'"></th:block>
-                                <th:block th:case="2" th:with="name='윤진영', initial='윤', title='', dept='', org='연습', email='yjy3838@practice-6.by-works.net', color='bg-purple-500'"></th:block>
-                                <th:block th:case="3" th:with="name='이다영', initial='이', title='', dept='1', org='연습', email='tooth.dayoung@practice-6.by-works.net', color='bg-teal-500'"></th:block>
-                                <th:block th:case="4" th:with="name='이원석', initial='이', title='', dept='3', org='연습', email='fasgemme@practice-6.by-works.net', color='bg-indigo-400'"></th:block>
-                                <th:block th:case="5" th:with="name='최유정', initial='최', title='', dept='2', org='연습', email='choi.yoojung@practice-6.by-works.net', color='bg-emerald-600'"></th:block>
-                            </th:block>
 
                             <td class="px-4 py-3 text-center" onclick="event.stopPropagation();">
                                 <input type="checkbox" class="custom-checkbox">
@@ -136,25 +129,25 @@
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-full text-white flex items-center justify-center font-medium text-xs"
-                                         th:classappend="${color != null ? color : 'bg-indigo-500'}"
-                                         th:text="${initial != null ? initial : '1'}">1</div>
-                                    <span class="font-medium" th:text="${name != null ? name : '12'}">12</span>
+                                         th:classappend="${user.profileImage != null ? user.profileImage : 'bg-gray-400'}"
+                    					th:text="${#strings.substring(session.user.userName, 0, 1)}">image</div>
+                                    <span class="font-medium" th:text="${user.userName}">name</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3" th:text="${title != null ? title : '사원 / 아르바이트'}">사원 / 아르바이트</td>
-                            <td class="px-4 py-3" th:text="${dept != null ? dept : '1'}">1</td>
-                            <td class="px-4 py-3" th:text="${org != null ? org : '연습'}">연습</td>
-                            <td class="px-4 py-3" th:text="${email != null ? email : 'test1@practice-6.by-works.net'}">test1@practice-6.by-works.net</td>
+                            <td class="px-4 py-3" th:text="|${user.positionName} / ${user.rankName}|">직책/직급</td>
+                            <td class="px-4 py-3" th:text="${user.organizaionName}">조직</td>
+                            <td class="px-4 py-3" th:text="${user.companyName}">회사명</td>
+                            <td class="px-4 py-3" th:text="${user.email != null ? user.email : ''}">email</td>
                             <td class="px-4 py-3"></td>
                             
                             <!-- Hidden Data for JS panel population -->
-                            <input type="hidden" class="data-initial" th:value="${initial != null ? initial : '1'}">
+                            <input type="hidden" class="data-initial" th:value="${initial != null ? initial : '121312'}">
                             <input type="hidden" class="data-color" th:value="${color != null ? color : 'bg-indigo-500'}">
-                            <input type="hidden" class="data-name" th:value="${name != null ? name : '12'}">
-                            <input type="hidden" class="data-title" th:value="${title != null ? title : '사원 / 아르바이트'}">
-                            <input type="hidden" class="data-org" th:value="${org != null ? org : '연습'}">
-                            <input type="hidden" class="data-dept" th:value="${dept != null ? dept : '1'}">
-                            <input type="hidden" class="data-email" th:value="${email != null ? email : 'test1@practice-6.by-works.net'}">
+                            <input type="hidden" class="data-name" th:value="${user.userName}">
+                            <input type="hidden" class="data-title" th:value="|${user.positionName} / ${user.rankName}|">
+                            <input type="hidden" class="data-org" th:value="${user.companyName}">
+                            <input type="hidden" class="data-dept" th:value="${user.organizaionName}">
+                            <input type="hidden" class="data-email" th:value="${user.email != null ? user.email : ''}">
                         </tr>
                     </tbody>
                 </table>

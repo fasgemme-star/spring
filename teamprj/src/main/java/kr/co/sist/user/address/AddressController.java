@@ -11,11 +11,13 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class AddressController {
 	
-	@Autowired
+	@Autowired(required = false)
 	private AddressService as;
 
 	@GetMapping("addressBook")
-	public String showAddressPage(HttpSession session, RangeDTO rDTO) {
+	public String showAddressPage(HttpSession session, RangeDTO rDTO, Model model) {
+		rDTO.setCompanyNo((String)session.getAttribute("companyNo"));
+		model.addAttribute("users", as.getAddressList(rDTO));
 		return "user/addressBook";
 	}
 	
