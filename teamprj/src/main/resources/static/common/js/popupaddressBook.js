@@ -1,103 +1,3 @@
-// 별 아이콘(즐겨찾기) 토글[cite: 3]
-function toggleStar(element, targetNo) {
-    const icon = element.querySelector('i');
-    const isCurrentlyStarred = icon.classList.contains('fa-solid'); // 현재 즐겨찾기 상태인지 확인
-    
-    // fa-solid(채워진 별)가 있으면 삭제(remove) 요청, 없으면 추가(add) 요청
-    const action = isCurrentlyStarred ? 'remove' : 'add';
-
-    $.ajax({
-        url: '/toggleFavorite', 
-        type: 'POST',
-        data: { 
-            targetNo: targetNo, 
-            action: action 
-        },
-        success: function(response) {
-            if (response === 'success') {
-                // DB 처리 성공 시에만 화면의 별 아이콘 변경
-                if (isCurrentlyStarred) {
-                    icon.classList.remove('fa-solid', 'text-yellow-400');
-                    icon.classList.add('fa-regular', 'text-gray-300');
-                } else {
-                    icon.classList.remove('fa-regular', 'text-gray-300');
-                    icon.classList.add('fa-solid', 'text-yellow-400');
-                }
-            } else {
-                alert('즐겨찾기 처리에 실패했습니다.');
-            }
-        },
-        error: function() {
-            alert('서버 통신 중 오류가 발생했습니다.');
-        }
-    });
-}
-
-// 로우 선택 및 우측 상세 패널 열기[cite: 3]
-function selectRow(row, event) {
-    document.querySelectorAll('.contact-row').forEach(r => {
-        r.classList.remove('table-row-selected');
-    });
-    row.classList.add('table-row-selected');
-
-    const initial = row.querySelector('.data-initial').value;
-    let color = row.querySelector('.data-color').value;
-    const name = row.querySelector('.data-name').value;
-    let title = row.querySelector('.data-title').value;
-    const org = row.querySelector('.data-org').value;
-    const dept = row.querySelector('.data-dept').value;
-    const email = row.querySelector('.data-email').value;
-	
-	const userNo = row.querySelector('.data-userno').value;
-	const isBookmarked = row.querySelector('.data-bookmark').value;
-	
-    if (!title || title.trim() === '') title = '직급 없음';
-
-    const avatarElem = document.getElementById('panelAvatar');
-    avatarElem.className = `w-20 h-20 rounded-full text-white flex items-center justify-center font-medium text-3xl shrink-0 ${color}`;
-    avatarElem.innerText = initial;
-
-    document.getElementById('panelName').innerText = name;
-    document.getElementById('panelTitle').innerText = title;
-    document.getElementById('panelOrg').innerText = org;
-    document.getElementById('panelDept').innerText = dept;
-	
-
-    const deptTitleWrapper = document.getElementById('panelDeptTitle');
-    if (dept && dept.trim() !== '') {
-        deptTitleWrapper.style.display = 'block';
-    } else {
-        deptTitleWrapper.style.display = 'none';
-    }
-
-    document.getElementById('panelEmail').innerText = email;
-    document.getElementById('panelEmail').href = `mailto:${email}`;
-
-    const panelStarBtn = document.getElementById('panelStarBtn');
-    panelStarBtn.setAttribute('data-userno', userNo); // 클릭 시 toggleStar로 넘겨줄 사번 세팅
-
-    const panelStarIcon = panelStarBtn.querySelector('i');
-    if (isBookmarked === '1') {
-        // 북마크 된 상태: 노란색 꽉 찬 별
-        panelStarIcon.className = 'fa-solid fa-star text-yellow-400';
-    } else {
-        // 북마크 안 된 상태: 회색 빈 별
-        panelStarIcon.className = 'fa-regular fa-star text-gray-300 hover:text-yellow-400';
-    }
-	
-    const panel = document.getElementById('detailPanel');
-    panel.classList.remove('translate-x-full');
-}
-
-// 우측 상세 패널 닫기[cite: 3]
-function closePanel() {
-    const panel = document.getElementById('detailPanel');
-    panel.classList.add('translate-x-full');
-
-    document.querySelectorAll('.contact-row').forEach(r => {
-        r.classList.remove('table-row-selected');
-    });
-}
 
 // 조직도 토글[cite: 3]
 function toggleMenu(element) {
@@ -112,7 +12,62 @@ function toggleMenu(element) {
     }
 }
 
+// ------------------------------------------------------------------
+// 하단 미리보기 업데이트 함수 (전역)
+// ------------------------------------------------------------------
+window.updatePreview = function() {
+    const previewContainer = document.getElementById('selected-preview');
+    const checkedBoxes = document.querySelectorAll('.user-checkbox:checked');
+    previewContainer.innerHTML = ''; // 기존 내용 초기화
 
+    const maxDisplay = 5;
+    const totalChecked = checkedBoxes.length;
+
+    for (let i = 0; i < totalChecked; i++) {
+        if (i >= maxDisplay) {
+            const moreSpan = document.createElement('span');
+            moreSpan.className = 'text-xs text-gray-500 font-medium ml-1';
+            moreSpan.textContent = `외 ${totalChecked - maxDisplay}명`;
+            previewContainer.appendChild(moreSpan);
+            break;
+        }
+        const name = checkedBoxes[i].getAttribute('data-name');
+        const badge = document.createElement('span');
+        badge.className = 'bg-blue-50 text-blue-700 border border-blue-200 text-xs px-2 py-1 rounded-md whitespace-nowrap';
+        badge.textContent = name;
+        previewContainer.appendChild(badge);
+    }
+};
+
+// ------------------------------------------------------------------
+// 검색 결과 클릭 시 실행되는 함수
+// ------------------------------------------------------------------
+window.addFromSearch = function(userNo, userName) {
+    // 1. 이미 화면 리스트에 해당 사원의 체크박스가 있는지 확인
+    let $checkbox = $('.user-checkbox[value="' + userNo + '"]');
+    
+    if ($checkbox.length > 0) {
+        // 화면에 있으면 강제로 체크
+        $checkbox.prop('checked', true);
+    } else {
+        // 화면에 없으면 (다른 부서/그룹 사원인 경우) 보이지 않는 hidden 체크박스를 만들어 리스트 컨테이너에 추가
+        const hiddenCb = `<input type="checkbox" class="user-checkbox hidden" value="${userNo}" data-name="${userName}" checked>`;
+        $('.space-y-4').append(hiddenCb);
+    }
+    
+    // 2. 하단 미리보기 배지 및 전체선택 동기화 업데이트
+    window.updatePreview();
+    const total = $('.user-checkbox:not(.hidden)').length;
+    const checkedCount = $('.user-checkbox:not(.hidden):checked').length;
+    const checkAllBtn = document.getElementById('checkAllBtn');
+    if(checkAllBtn) {
+        checkAllBtn.checked = (total > 0 && total === checkedCount);
+    }
+    
+    // 3. 검색창 초기화 및 결과창 숨기기
+    $('#searchInput').val('');
+    $('#searchResults').addClass('hidden');
+};
 
 // ------------------------------------------------------------------
 // 페이지 로드 후 실행되는 DOM 이벤트들
@@ -140,6 +95,10 @@ document.addEventListener('DOMContentLoaded', function() {
         window.updatePreview();
     });
 
+    // 3. 취소 버튼 동작[cite: 3]
+    $('#cancelBtn').on('click', function() {
+        window.close();
+    });
 
     // 4. 저장 버튼 클릭 시 배열 추출 및 Ajax 전송[cite: 3]
     $('#saveUsersBtn').off('click').on('click', function() {

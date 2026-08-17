@@ -19,8 +19,9 @@ public class InquiryController {
 	}
 	
 	@PostMapping("inquiryProcess")
-	public String addInquiry(MultipartFile mpf , InquiryDTO iDTO, Model model) {
-		model.addAttribute("msg", is.createInquiry(iDTO));
+	public String addInquiry(MultipartFile uploadFile , InquiryDTO iDTO, Model model) {
+		
+		model.addAttribute("msg", is.createInquiry(uploadFile, iDTO));
 		return "inquiry/inquiryResult";
 	}
 

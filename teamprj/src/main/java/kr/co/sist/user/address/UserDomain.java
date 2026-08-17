@@ -7,5 +7,5 @@ import lombok.Data;
 @Alias("addressUserDomain")
 @Data
 public class UserDomain {
-	private String userName, positionName, rankName, organizaionName, companyName, email, phoneNumber, profileImage;
+	private String userNo, userName, positionName, rankName, organizaionName, companyName, email, phoneNumber, profileImage, groupsName, isBookmarked;
 }

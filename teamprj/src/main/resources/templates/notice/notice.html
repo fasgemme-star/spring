@@ -15,10 +15,13 @@
 
 <main class="notice-container">
   <h1 class="page-title">공지사항</h1>
-  <div class="notice-list">
-	<div th:text="${notice.noticeTitle}"></div>
-	<div th:text="${notice.createdDate}"></div>
-	<div th:text="${notice.content}"></div>
+  <div class="notice-detail">
+	<div class="detail-title" th:text="${notice.noticeTitle}"></div>
+	<div class="detail-date" th:text="${#temporals.format(notice.createdDate, 'yyyy-MM-dd')}"></div>
+	<hr class="divider">
+	<div class="detail-body" th:utext="${notice.content}"></div>
+	<hr class="divider-bottom">
+	<a th:href="@{/user/notices}" class="back-link">← 목록으로</a>
   </div>
 </main>
 

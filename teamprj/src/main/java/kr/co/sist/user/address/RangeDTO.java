@@ -7,5 +7,5 @@ import lombok.Data;
 @Alias("addressRangeDTO")
 @Data
 public class RangeDTO {
-	private String name, phoneNumber, group, organization, bookmarked, companyNo;
+	private String userNo, companyNo, organizationNo, groupsNo, type, keyword;
 }

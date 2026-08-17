@@ -5,7 +5,7 @@
 <title>공지사항 - WORKS</title>
 <link rel="stylesheet" th:href="@{/common/css/works.css}" />
 </head>
-<body>
+<body class="modal-open">
 <!-- ===== Header ===== -->
 <div th:replace="~{ fragments/all :: header }"></div>
 
@@ -14,10 +14,26 @@
 <!-- ===== 주요 기능 ===== -->
 
 <main class="notice-container">
-  <h1 class="page-title">1:1문의</h1>
-
-  <div class="notice-list">
-	완
+  <!-- 배경 레이어와 모달 컨테이너 -->
+  <div class="modal-overlay">
+    <div class="modal-box">
+      <!-- 성공 아이콘 (선택 사항) -->
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      
+      <!-- 컨트롤러에서 넘겨준 msg 출력 -->
+      <h2 class="modal-title">감사합니다.</h2>
+      <p class="modal-message" th:text="${msg}">문의가 정상적으로 등록되었습니다.</p>
+      
+      <!-- 확인 버튼: 클릭 시 메인 화면이나 원하는 페이지로 이동 -->
+      <div class="modal-btn-wrap">
+        <a th:href="@{/}" class="btn-modal-confirm">확인</a>
+      </div>
+    </div>
   </div>
 </main>
 

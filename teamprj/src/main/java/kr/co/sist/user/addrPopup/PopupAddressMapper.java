@@ -9,6 +9,9 @@ public interface PopupAddressMapper {
 	public List<UserDomain> selectAddressList(RangeDTO rDTO);
 
 	public List<GroupsDomain> selectGroup(String userNo);
+	public String selectCompany(String companyNo);
 
 	public 	List<OrganizationDomain> selectOrganization(String userNo);
+	
+	public 	List<UserDomain> getContactsByKeyword(String keyword);
 }

@@ -7,6 +7,6 @@ import lombok.Data;
 @Alias("addrPopupRangeDTO")
 @Data
 public class RangeDTO {
-	private String name, phoneNumber, group, organization, companyNo;
+	private String userNo, phoneNumber, groupsNo, organizationNo, companyNo, type;
 	
 }

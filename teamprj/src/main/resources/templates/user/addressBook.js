@@ -1,36 +1,13 @@
 // 별 아이콘(즐겨찾기) 토글[cite: 3]
-function toggleStar(element, targetNo) {
+function toggleStar(element) {
     const icon = element.querySelector('i');
-    const isCurrentlyStarred = icon.classList.contains('fa-solid'); // 현재 즐겨찾기 상태인지 확인
-    
-    // fa-solid(채워진 별)가 있으면 삭제(remove) 요청, 없으면 추가(add) 요청
-    const action = isCurrentlyStarred ? 'remove' : 'add';
-
-    $.ajax({
-        url: '/toggleFavorite', 
-        type: 'POST',
-        data: { 
-            targetNo: targetNo, 
-            action: action 
-        },
-        success: function(response) {
-            if (response === 'success') {
-                // DB 처리 성공 시에만 화면의 별 아이콘 변경
-                if (isCurrentlyStarred) {
-                    icon.classList.remove('fa-solid', 'text-yellow-400');
-                    icon.classList.add('fa-regular', 'text-gray-300');
-                } else {
-                    icon.classList.remove('fa-regular', 'text-gray-300');
-                    icon.classList.add('fa-solid', 'text-yellow-400');
-                }
-            } else {
-                alert('즐겨찾기 처리에 실패했습니다.');
-            }
-        },
-        error: function() {
-            alert('서버 통신 중 오류가 발생했습니다.');
-        }
-    });
+    if (icon.classList.contains('fa-regular')) {
+        icon.classList.remove('fa-regular', 'text-gray-300');
+        icon.classList.add('fa-solid', 'text-yellow-400');
+    } else {
+        icon.classList.remove('fa-solid', 'text-yellow-400');
+        icon.classList.add('fa-regular', 'text-gray-300');
+    }
 }
 
 // 로우 선택 및 우측 상세 패널 열기[cite: 3]
@@ -47,10 +24,7 @@ function selectRow(row, event) {
     const org = row.querySelector('.data-org').value;
     const dept = row.querySelector('.data-dept').value;
     const email = row.querySelector('.data-email').value;
-	
-	const userNo = row.querySelector('.data-userno').value;
-	const isBookmarked = row.querySelector('.data-bookmark').value;
-	
+
     if (!title || title.trim() === '') title = '직급 없음';
 
     const avatarElem = document.getElementById('panelAvatar');
@@ -61,7 +35,6 @@ function selectRow(row, event) {
     document.getElementById('panelTitle').innerText = title;
     document.getElementById('panelOrg').innerText = org;
     document.getElementById('panelDept').innerText = dept;
-	
 
     const deptTitleWrapper = document.getElementById('panelDeptTitle');
     if (dept && dept.trim() !== '') {
@@ -73,18 +46,6 @@ function selectRow(row, event) {
     document.getElementById('panelEmail').innerText = email;
     document.getElementById('panelEmail').href = `mailto:${email}`;
 
-    const panelStarBtn = document.getElementById('panelStarBtn');
-    panelStarBtn.setAttribute('data-userno', userNo); // 클릭 시 toggleStar로 넘겨줄 사번 세팅
-
-    const panelStarIcon = panelStarBtn.querySelector('i');
-    if (isBookmarked === '1') {
-        // 북마크 된 상태: 노란색 꽉 찬 별
-        panelStarIcon.className = 'fa-solid fa-star text-yellow-400';
-    } else {
-        // 북마크 안 된 상태: 회색 빈 별
-        panelStarIcon.className = 'fa-regular fa-star text-gray-300 hover:text-yellow-400';
-    }
-	
     const panel = document.getElementById('detailPanel');
     panel.classList.remove('translate-x-full');
 }
@@ -141,33 +102,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // 4. 저장 버튼 클릭 시 배열 추출 및 Ajax 전송[cite: 3]
-    $('#saveUsersBtn').off('click').on('click', function() {
-        const checkedBoxes = $('.user-checkbox:checked');
-
-        const selectedUserNos = checkedBoxes.map(function() {
-            return $(this).val();
-        }).get();
-
-        if (selectedUserNos.length === 0) {
-            alert('선택된 사원이 없습니다.');
-            return;
-        }
-
-        $.ajax({
-            url: '/api/users/save', 
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({ userNos: selectedUserNos }),
-            success: function(response) {
-                window.close(); 
-            },
-            error: function(xhr, status, error) {
-                console.error('저장 실패:', error);
-                alert('저장 중 오류가 발생했습니다.');
-            }
-        });
-    });
 });
 
 // ------------------------------------------------------------------

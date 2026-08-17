@@ -7,6 +7,6 @@ import lombok.Data;
 @Alias("addrPopupUserDomain")
 @Data
 public class UserDomain {
-	private String userNo, userName, positionName, rankName, organizaionName, companyName, email, phoneNumber, profileImage;
+	private String userNo, userName, positionName, rankName, organizaionName, companyName, email, phoneNumber, profileImage, groupsName;
 	
 }
