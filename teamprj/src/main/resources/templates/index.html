@@ -82,16 +82,7 @@
       <button type="button" th:onclick="|openAddressPopup('@{/popupAddr}')|" class="px-4 py-2 bg-blue-500 text-white rounded">
     	주소록 팝업 열기
 		</button>
-<script>
-// 팝업 띄우는 함수
-function openAddressPopup(url) {
-    const title = "AddressBookPopup";
-    const specs = "width=850,height=600,left=200,top=100,scrollbars=yes,resizable=yes";
-    
-    // 팝업 호출
-    window.open(url, title, specs);
-}
-</script>
+
       </p>
       </div>
       <div class="demo-card"><span class="card-title">실시간 대화 기능</span><p>구성원과 1:1 또는 그룹으로 실시간 채팅을 나눌 수 있습니다.</p></div>

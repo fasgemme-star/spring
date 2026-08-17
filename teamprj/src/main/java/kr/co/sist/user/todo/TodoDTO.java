@@ -1,12 +1,14 @@
 package kr.co.sist.user.todo;
 
-import java.sql.Timestamp;
+import java.util.List;
+
+import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
 
+@Alias("todoDTO")
 @Data
 public class TodoDTO {
-	private String title, content;
-	private String[] representUserNo;
-	private Timestamp startDate, endDate;
+	private String title, content, userNo, endDate, todoNo;
+	private List<String> representUserNo;
 }

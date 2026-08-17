@@ -8,13 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class TodoService {
 
-	@Autowired
-	private TodoDAO tDAO;
+	@Autowired(required = false)
+	private TodoMapper tm;
 	
 	public List<TodoDomain> getTodoList(RangeDTO rDTO) {
-		List<TodoDomain> list = null;
-		
-		return list;
+		return tm.selectTodoList(rDTO);
 	}
 	
 	public TodoDomain getTodoDetail(String userNo, String todoNo) {
@@ -22,9 +20,18 @@ public class TodoService {
 		return td;
 	}
 	
-	public boolean createTodo(TodoDTO tdDTO) {
-		boolean flag = false;
-		return flag;
+	public void createTodo(TodoDTO tdDTO) {
+
+		tm.insertTodo(tdDTO);
+		String generatedTodoNo = tdDTO.getTodoNo();
+
+		List<String> representList = tdDTO.getRepresentUserNo();
+		if (representList != null && !representList.isEmpty()) {
+			for (String representUserNo : representList) {
+				// 매퍼 호출 시 파라미터를 2개 넘겨야 하므로 map이나 어노테이션(@Param)을 사용해야 할 수 있습니다.
+				tm.insertTodoRepresentative(generatedTodoNo, representUserNo, tdDTO.getUserNo());
+			}
+		}
 	}
 	
 	public boolean deleteTodo(String userNo, String todoNo) {

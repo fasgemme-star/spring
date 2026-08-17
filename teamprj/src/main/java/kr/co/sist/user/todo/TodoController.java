@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -14,23 +15,22 @@ public class TodoController {
 	private TodoService ts;
 	
 	@GetMapping("todo")
-	public String showTodoPage(HttpSession session) {
+	public String showTodoPage(RangeDTO rDTO, HttpSession session, Model model) {
+		System.out.println(rDTO.toString());
+		model.addAttribute("todoList", ts.getTodoList(rDTO));
 		return "user/todo";
 	}
 	
-	public String TodoList(RangeDTO rDTO, HttpSession session) {
-		return "";
-	}
-	
+	@PostMapping("addTodo")
 	public String  addTodo(TodoDTO tdDTO, HttpSession session, Model model) {
-		return "";
+		tdDTO.setUserNo((String) session.getAttribute("userNo"));
+		ts.createTodo(tdDTO);
+		return "redirect:/todo";
 	}
 	
-	public String modifyTodo(TodoDTO tdDTO,Model model) {
-		return "";
-	}
 	
 	public String deleteTodo(String todoNo, HttpSession session) {
+		ts.deleteTodo((String)session.getAttribute("userNo"), todoNo);
 		return "";
 	}
 	

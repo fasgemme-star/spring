@@ -1,12 +1,15 @@
 package kr.co.sist.user.todo;
 
 import java.sql.Timestamp;
+import java.util.List;
+
+import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
 
+@Alias("todoDomain")
 @Data
 public class TodoDomain {
-	private String title, content, status;
-	private String[] representUserNo;
+	private String userName, todoNo, title, content, status, representativeUserNames;
 	private Timestamp startDate, endDate;
 }

@@ -1,6 +1,11 @@
-/**
- * 
- */
+// 팝업 띄우는 함수
+function openAddressPopup(url) {
+    const title = "AddressBookPopup";
+    const specs = "width=850,height=600,left=200,top=100,scrollbars=yes,resizable=yes";
+    
+    // 팝업 호출
+    window.open(url, title, specs);
+}
 const featureMap = {
     chat: { cards: 'cardsChat', visual: 'visualChat' },
     calendar: { cards: 'cardsCalendar', visual: 'visualCalendar' },

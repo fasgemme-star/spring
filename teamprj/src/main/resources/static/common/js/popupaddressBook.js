@@ -101,32 +101,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 4. 저장 버튼 클릭 시 배열 추출 및 Ajax 전송[cite: 3]
-    $('#saveUsersBtn').off('click').on('click', function() {
-        const checkedBoxes = $('.user-checkbox:checked');
+	$('#saveUsersBtn').off('click').on('click', function() {
+	        const checkedBoxes = $('.user-checkbox:checked');
 
-        const selectedUserNos = checkedBoxes.map(function() {
-            return $(this).val();
-        }).get();
+	        if (checkedBoxes.length === 0) {
+	            alert('선택된 사원이 없습니다.');
+	            return;
+	        }
 
-        if (selectedUserNos.length === 0) {
-            alert('선택된 사원이 없습니다.');
-            return;
-        }
+	        // 부모 창이 존재하고 닫히지 않았는지 확인
+	        if (window.opener && !window.opener.closed) {
+	            // 체크된 사원들을 순회하며 부모 창의 함수 호출
+	            checkedBoxes.each(function() {
+	                const userNo = $(this).val(); // value에 있는 사번 추출
+	                const userName = $(this).attr('data-name'); // data-name 속성에 있는 이름 추출
+	                
+	                // 부모 창에 만들어둔 addRepresentative 함수 실행
+	                if(typeof window.opener.addRepresentative === 'function') {
+	                    window.opener.addRepresentative(userName, userNo);
+	                }
+	            });
+	        } else {
+	            console.warn('부모 창을 찾을 수 없습니다.');
+	        }
 
-        $.ajax({
-            url: '/api/users/save', 
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({ userNos: selectedUserNos }),
-            success: function(response) {
-                window.close(); 
-            },
-            error: function(xhr, status, error) {
-                console.error('저장 실패:', error);
-                alert('저장 중 오류가 발생했습니다.');
-            }
-        });
-    });
+	        // 정보 전달 후 팝업 닫기
+	        window.close(); 
+	    });
 });
 
 // ------------------------------------------------------------------
