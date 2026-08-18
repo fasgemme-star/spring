@@ -15,9 +15,7 @@ public class MainController {
 
 	@GetMapping("/")
 	public String main(HttpSession session) {
-		session.setAttribute("userNo", "U000001");
-		session.setAttribute("companyNo", "CO000001");
-		session.setAttribute("user", ms.getUser("U000001"));
+		
 		return "index";
 	}
 	
@@ -29,6 +27,31 @@ public class MainController {
 	@GetMapping("/policy/terms")
 	public String showterms() {
 		return "policy/terms";
+	}
+	
+	@GetMapping("login")
+	public String login() {
+		return "user/login";
+	}
+	@GetMapping("getAdmin")
+	public String getAdmin(HttpSession session) {
+		session.setAttribute("userNo", "U000001");
+		session.setAttribute("companyNo", "CO000001");
+		session.setAttribute("user", ms.getUser((String)session.getAttribute("userNo")));
+		return "index";
+	}
+	@GetMapping("getUser")
+	public String getUser(HttpSession session) {
+		session.setAttribute("userNo", "U000002");
+		session.setAttribute("companyNo", "CO000001");
+		session.setAttribute("user", ms.getUser((String)session.getAttribute("userNo")));
+		return "index";
+	}
+	
+	@GetMapping("logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
 	}
 	
 	

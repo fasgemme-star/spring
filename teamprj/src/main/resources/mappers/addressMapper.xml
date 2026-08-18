@@ -97,8 +97,8 @@
                         FROM GROUPSMEMBER 
                         WHERE GROUPS_NO IN (
                             SELECT GROUPS_NO 
-                            FROM GROUPS 
-                            WHERE USER_NO = #{userNo}
+                            FROM groupsMember 
+                            WHERE grp_member_NO = #{userNo}
                         )
                     )
                 </when>
@@ -120,10 +120,7 @@
     <select id="selectOrganization" parameterType="String" resultType="addressOrganizationDomain">
         SELECT ORGANIZATION_NO organizationNo, ORGANIZATION_NAME organizationName
         FROM ORGANIZATION
-        WHERE ORGANIZATION_NO IN
-        (SELECT ORGANIZATION_NO
-        FROM ORGANIZATIONMEMBER
-        WHERE ORGMEMBER_NO = #{ userNo })
+        WHERE COMPANY_NO = #{ companyNo }
     </select>
     
     <!-- 5. 사원 검색 기능 (팝업 로직 이식) -->

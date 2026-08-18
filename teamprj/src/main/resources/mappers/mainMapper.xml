@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.sist.user.main.MainMapper">
 	<select id="selectUserInfo" parameterType="String" resultType="MainUserDomain">
-	SELECT USER_NAME userName, PROFILEIMAGE profileImage, ROLE_NAME role
+	SELECT USER_NAME userName, PROFILEIMAGE profileImage, ROLE_LEVEL role
 	FROM USERS U
 	LEFT JOIN ROLE R ON U.USER_NO = R.USER_NO
 	WHERE U.USER_NO = #{ userNo }

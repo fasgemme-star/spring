@@ -20,8 +20,8 @@ public class AddressService {
         return am.selectGroup(userNo);
     }
     
-    public List<OrganizationDomain> getOrganization(String userNo) {
-        return am.selectOrganization(userNo);
+    public List<OrganizationDomain> getOrganization(String companyNo) {
+        return am.selectOrganization(companyNo);
     }
     
     public String getCompany(String companyNo) {

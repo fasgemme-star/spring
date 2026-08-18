@@ -20,15 +20,14 @@ public class AddressController {
 
 	@GetMapping("addressBook")
     public String showAddressPage(HttpSession session, RangeDTO rDTO, Model model) {
-        rDTO.setCompanyNo("CO000001");
-        rDTO.setUserNo("U000001");
-        System.out.println("=================================================="+rDTO.toString());
+        rDTO.setUserNo((String)session.getAttribute("userNo"));
+        rDTO.setCompanyNo((String)session.getAttribute("companyNo"));
         List<UserDomain> userList = as.getAddressList(rDTO);
         
         model.addAttribute("users", userList);
         model.addAttribute("company", as.getCompany(rDTO.getCompanyNo()));
         model.addAttribute("groups", as.getGroup(rDTO.getUserNo()));
-        model.addAttribute("organizations", as.getOrganization(rDTO.getUserNo()));
+        model.addAttribute("organizations", as.getOrganization(rDTO.getCompanyNo()));
         
         return "user/addressBook";
     }
@@ -49,9 +48,7 @@ public class AddressController {
     @PostMapping("/toggleFavorite")
     public String modifyBookmark(HttpSession session, String targetNo, String action) {
                                      
-        // 임시로 하드코딩된 본인 사번 사용 (나중에는 세션에서 가져오셔야 합니다)
-        // String userNo = (String) session.getAttribute("userNo");
-        String userNo = "U000001"; 
+        String userNo = (String)session.getAttribute("userNo");
         
         // DTO에 본인 사번과 대상 사번 세팅 (DTO 이름은 프로젝트에 맞게 수정하세요)
         UserDTO dto = new UserDTO();

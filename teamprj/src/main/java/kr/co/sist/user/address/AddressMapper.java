@@ -10,7 +10,7 @@ public interface AddressMapper {
 
 	public List<GroupsDomain> selectGroup(String userNo);
 
-	public List<OrganizationDomain> selectOrganization(String userNo);
+	public List<OrganizationDomain> selectOrganization(String companyNo);
 
 	public UserDomain selectAddressDetail(String userNo);
 
