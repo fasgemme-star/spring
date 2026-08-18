@@ -52,7 +52,7 @@
                         <i class="fa-solid fa-circle-check text-purple-500 text-2xl mb-2"></i>
                         <span class="text-xs text-gray-700">할 일</span>
                     </a>
-                    <a th:if="${session.user.role == '99'}"
+                    <a th:if="${session.user != null and session.user.role != null and session.user.role >= '50'}"
                     th:href="@{/admin}" class="flex flex-col items-center p-2 hover:bg-gray-50 rounded-lg">
                         <i class="fa-solid fa-user-tie text-gray-500 text-2xl mb-2"></i>
                         <span class="text-xs text-gray-700">Admin</span>
