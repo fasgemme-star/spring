@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const content = item.dataset.content || '내용이 없습니다.';
             const endDate = item.dataset.endDate || '기한 없음';
             const representatives = item.dataset.representatives || '미정';
-			const requester = item.dataset.requester || '알 수 없음';
+            const requester = item.dataset.requester || '알 수 없음';
             const status = item.dataset.status;
 
             // DOM 요소에 값 대입
@@ -52,27 +52,37 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('detailContent').textContent = content;
             document.getElementById('detailEndDate').textContent = endDate;
             document.getElementById('detailRepresentatives').textContent = representatives;
-			document.getElementById('detailRequester').textContent = requester;
+            document.getElementById('detailRequester').textContent = requester;
 
             // 상태값에 따른 텍스트 및 버튼 스타일 변경
             const detailStatusText = document.getElementById('detailStatusText');
-            const detailActionBtn = document.getElementById('detailActionBtn'); // 추가된 버튼 엘리먼트
+            const detailActionBtn = document.getElementById('detailActionBtn');
+            const detailTodoNoInput = document.getElementById('detailTodoNoInput');
+            const detailStatusInput = document.getElementById('detailStatusInput');
+
+            if (detailTodoNoInput) {
+                detailTodoNoInput.value = item.dataset.no;
+            }
 
             if (status === '1') {
-                // 1) 완료 상태일 때
+                // [완료 상태인 경우] -> 버튼을 누르면 '미완료(0)'로 변경해야 함
                 if (detailStatusText) detailStatusText.textContent = '완료된 할 일';
+
+                if (detailStatusInput) detailStatusInput.value = '0'; // 폼으로 전송될 상태값 세팅
+
                 if (detailActionBtn) {
                     detailActionBtn.textContent = '미완료로 변경';
-                    // 회색 버튼으로 클래스 변경
-                    detailActionBtn.className = 'w-full bg-gray-400 hover:bg-gray-500 text-white font-bold py-3.5 rounded-lg mb-8 transition shadow-sm';
+                    detailActionBtn.className = 'w-full bg-gray-400 hover:bg-gray-500 text-white font-bold py-3.5 rounded-lg transition shadow-sm';
                 }
             } else {
-                // 2) 미완료 상태일 때
+                // [미완료 상태인 경우] -> 버튼을 누르면 '완료(1)'로 변경해야 함
                 if (detailStatusText) detailStatusText.textContent = '미완료된 할 일';
+
+                if (detailStatusInput) detailStatusInput.value = '1'; // 폼으로 전송될 상태값 세팅
+
                 if (detailActionBtn) {
                     detailActionBtn.textContent = '완료하기';
-                    // 파란색 버튼으로 클래스 복구
-                    detailActionBtn.className = 'w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg mb-8 transition shadow-sm';
+                    detailActionBtn.className = 'w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition shadow-sm';
                 }
             }
 

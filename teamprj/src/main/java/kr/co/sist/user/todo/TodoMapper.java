@@ -9,6 +9,7 @@ public interface TodoMapper {
 	public List<TodoDomain> selectTodoList(RangeDTO rDTO);
 	public List<TodoDomain> selectrepresentativeList(RangeDTO rDTO);
 	public int insertTodo(TodoDTO tdDTO);
-	void insertTodoRepresentative(String todoNo, String representUserNo, String userNo);
+	public void insertTodoRepresentative(String todoNo, String representUserNo, String userNo);
+	public int updateTodoStatus(String status, String todoNo);
 	
 }

@@ -15,16 +15,20 @@
 		t.end_date AS endDate,
 		u2.user_name AS userName,
 		(
-		SELECT LISTAGG(u.user_name, ', ')
+		SELECT
+		LISTAGG(u.user_name, ', ')
 		WITHIN GROUP (ORDER BY u.user_name)
-		FROM representative tr
+		FROM
+		representative tr
 		JOIN users u
 		ON tr.REPRESENTATIVE_NO = u.user_no
-		WHERE tr.TODO_NO = t.todo_no
+		WHERE
+		tr.TODO_NO = t.todo_no
 		) AS
 		representativeUserNames
 		FROM todo t
-		LEFT JOIN users u2 ON t.user_no = u2.user_no
+		LEFT JOIN
+		users u2 ON t.user_no = u2.user_no
 		<where>
 			<!-- 1. '담당 할 일' (representativeUserNo만 넘어왔을 때) -->
 			<if
@@ -51,7 +55,7 @@
 				t.todo_no IN (
 				SELECT TODO_NO
 				FROM
-				todo_representative
+				REPRESENTATIVE <!-- 'todo_representative'에서 'REPRESENTATIVE'로 수정 -->
 				WHERE REPRESENTATIVE_NO = #{representativeUserNo}
 				)
 				)
@@ -66,36 +70,45 @@
 	</select>
 
 	<insert id="insertTodo" parameterType="todoDTO">
-    <!-- 1. 시퀀스 숫자를 'td000000' 형태의 문자열로 가공해서 DTO의 todoNo 필드(String)에 저장 -->
-    <selectKey keyProperty="todoNo" resultType="String" order="BEFORE">
-        SELECT 'TD' || TO_CHAR(seq_todo_no.NEXTVAL, 'FM000000') FROM DUAL
-    </selectKey>
+		<!-- 1. 시퀀스 숫자를 'td000000' 형태의 문자열로 가공해서 DTO의 todoNo 필드(String)에 저장 -->
+		<selectKey keyProperty="todoNo" resultType="String"
+			order="BEFORE">
+			SELECT 'TD' || TO_CHAR(seq_todo_no.NEXTVAL, 'FM000000') FROM DUAL
+		</selectKey>
 
-    <!-- 2. 위에서 만든 #{todoNo}를 첫 번째 파라미터로 넣어서 INSERT -->
-    insert into todo(todo_no, user_no, title, content, status, start_date, end_date, bookmark)
-    values( 
-        #{todoNo}, 
-        #{userNo}, 
-        #{title}, 
-        #{content}, 
-        '0', 
-        systimestamp,
-        <choose>
-            <when test="endDate != null and endDate != ''">
-                to_timestamp(#{endDate}, 'YYYY-MM-DD')
-            </when>
-            <otherwise>
-                null
-            </otherwise>
-        </choose>, 
-        '0'
-    )
-</insert>
+		<!-- 2. 위에서 만든 #{todoNo}를 첫 번째 파라미터로 넣어서 INSERT -->
+		insert into todo(todo_no, user_no, title, content, status, start_date,
+		end_date, bookmark)
+		values(
+		#{todoNo},
+		#{userNo},
+		#{title},
+		#{content},
+		'0',
+		systimestamp,
+		<choose>
+			<when test="endDate != null and endDate != ''">
+				to_timestamp(#{endDate}, 'YYYY-MM-DD')
+			</when>
+			<otherwise>
+				null
+			</otherwise>
+		</choose>
+		,
+		'0'
+		)
+	</insert>
 
-<!-- 담당자 매핑 테이블 (그대로 사용하시면 됩니다) -->
-<insert id="insertTodoRepresentative">
-    insert into REPRESENTATIVE (representative_no, todo_no, user_no)
-    values (#{representUserNo}, #{todoNo}, #{userNo})
-</insert>
+	<!-- 담당자 매핑 테이블 (그대로 사용하시면 됩니다) -->
+	<insert id="insertTodoRepresentative">
+		insert into REPRESENTATIVE (representative_no, todo_no, user_no)
+		values (#{representUserNo}, #{todoNo}, #{userNo})
+	</insert>
+	
+	<update id="updateTodoStatus">
+    UPDATE todo
+    SET status = #{status}
+    WHERE todo_no = #{todoNo}
+</update>
 
 </mapper>

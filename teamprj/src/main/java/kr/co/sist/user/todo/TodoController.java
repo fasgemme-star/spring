@@ -16,7 +16,17 @@ public class TodoController {
 	
 	@GetMapping("todo")
 	public String showTodoPage(RangeDTO rDTO, HttpSession session, Model model) {
-		System.out.println(rDTO.toString());
+		String userNo = (String) session.getAttribute("userNo");
+		
+		if (userNo != null) {
+	        // 별도의 검색 조건이 넘어오지 않았다면 내 관련 할일만 조회되도록 기본값 설정
+	        if (rDTO.getUserNo() == null && rDTO.getRepresentativeUserNo() == null) {
+	            rDTO.setUserNo(userNo);
+	            rDTO.setRepresentativeUserNo(userNo);
+	        }
+	    }
+		
+		System.out.println("========="+rDTO.toString());
 		model.addAttribute("todoList", ts.getTodoList(rDTO));
 		return "user/todo";
 	}
@@ -34,8 +44,10 @@ public class TodoController {
 		return "";
 	}
 	
-	public String modifyTodiStatus(String status, String todoNo, HttpSession sesseion) {
-		return "";
+	@PostMapping("modifyTodoStatus")
+	public String modifyTodoStatus(String status, String todoNo, HttpSession sesseion) {
+		ts.changeTodoStatus(status, todoNo);
+		return "redirect:/todo";
 	}
 
 }

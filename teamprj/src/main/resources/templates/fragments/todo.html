@@ -15,7 +15,7 @@
         <!-- 2. 검색창 -->
         <div class="relative w-96 ml-2">
             <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <input type="text" id="searchInput" placeholder="할일, 태그 검색" class="w-full bg-gray-100 border-none rounded-full py-1.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-100 text-sm">
+            <input type="text" id="searchInput" placeholder="할일 검색" class="w-full bg-gray-100 border-none rounded-full py-1.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-100 text-sm">
             
             <!-- 검색창 드롭다운 -->
             <div id="searchDropdown" class="hidden absolute top-full left-0 mt-2 w-full bg-white border border-gray-200 rounded-md shadow-lg p-4 text-gray-500 text-sm z-50">
@@ -89,13 +89,17 @@
 
         <!-- 프로필 -->
         <div class="relative ml-2">
-            <button id="profileBtn" class="w-8 h-8 rounded-full bg-blue-400 text-white flex items-center justify-center font-bold text-sm focus:outline-none">
-                홍
+            <button id="profileBtn" class="w-8 h-8 rounded-full bg-blue-400 text-white flex items-center justify-center font-bold text-sm focus:outline-none"
+            		th:classappend="${session.user?.profileImage != null ? session.user?.profileImage : 'bg-gray-400'}"
+                    th:text="${session.user?.userName != null ? #strings.substring(session.user?.userName, 0, 1) : 'U'}">
             </button>
             <div id="profileDropdown" class="hidden absolute top-full right-0 mt-3 w-64 bg-white border border-gray-200 rounded-lg shadow-xl z-50 overflow-hidden">
                 <div class="p-4 flex items-center gap-3 border-b border-gray-100 bg-gray-50">
-                    <div class="w-11 h-11 rounded-full bg-blue-400 text-white flex items-center justify-center font-bold text-lg">홍</div>
-                    <div class="font-bold text-gray-800 text-base">홍길동</div>
+                    <div class="w-11 h-11 rounded-full bg-blue-400 text-white flex items-center justify-center font-bold text-lg"
+                    th:classappend="${session.user?.profileImage != null ? session.user?.profileImage : 'bg-gray-400'}"
+                    th:text="${session.user?.userName != null ? #strings.substring(session.user?.userName, 0, 1) : 'U'}"
+                    >U</div>
+                    <div class="font-bold text-gray-800 text-base" th:text="${session.user?.userName != null ? session.user?.userName : '로그인 필요'}">이름</div>
                 </div>
                 <div class="p-2">
                     <button class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md flex items-center gap-2">

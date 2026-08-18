@@ -40,7 +40,7 @@ public class TodoService {
 	}
 	
 	public boolean changeTodoStatus(String status, String todoNo) {
-		boolean flag = false;
+		boolean flag = tm.updateTodoStatus(status, todoNo) == 1;
 		return flag;
 	}
 	
