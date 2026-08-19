@@ -9,7 +9,7 @@ import lombok.Data;
 @Alias("todoRangeDTO")
 @Data
 public class RangeDTO {
-	private String userNo, content, representativeUserNo, requestUserNo, isRepresented, isRequested;
+	private String keyword, userNo, content, representativeUserNo, requestUserNo, isRepresented, isRequested;
 	private Timestamp startDate, endDate;
 
 }

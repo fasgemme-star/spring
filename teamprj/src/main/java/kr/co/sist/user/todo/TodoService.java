@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TodoService {
@@ -34,9 +35,14 @@ public class TodoService {
 		}
 	}
 	
-	public boolean deleteTodo(String userNo, String todoNo) {
-		boolean flag = false;
-		return flag;
+	@Transactional
+	public boolean deleteTodos(List<String> todoNos) {
+		if (todoNos != null && !todoNos.isEmpty()) {
+			tm.deleteTodoRepresentatives(todoNos);
+			tm.deleteTodos(todoNos);
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean changeTodoStatus(String status, String todoNo) {

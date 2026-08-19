@@ -11,5 +11,7 @@ public interface TodoMapper {
 	public int insertTodo(TodoDTO tdDTO);
 	public void insertTodoRepresentative(String todoNo, String representUserNo, String userNo);
 	public int updateTodoStatus(String status, String todoNo);
+	public int deleteTodoRepresentatives(List<String> todoNos);
+	public int deleteTodos(List<String> todoNos);
 	
 }

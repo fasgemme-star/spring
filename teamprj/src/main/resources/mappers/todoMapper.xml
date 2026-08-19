@@ -60,6 +60,9 @@
 				)
 				)
 			</if>
+			<if test="keyword != null and keyword != ''">
+            AND t.title LIKE '%' || #{keyword} || '%'
+        </if>
 		</where>
 	</select>
 	<select id="selectrepresentativeList"
@@ -110,5 +113,20 @@
     SET status = #{status}
     WHERE todo_no = #{todoNo}
 </update>
+<delete id="deleteTodoRepresentatives" parameterType="java.util.List">
+    DELETE FROM REPRESENTATIVE
+    WHERE TODO_NO IN
+    <foreach collection="list" item="todoNo" open="(" separator="," close=")">
+        #{todoNo}
+    </foreach>
+</delete>
 
+<!-- 2. 할 일(todo) 데이터 삭제 -->
+<delete id="deleteTodos" parameterType="java.util.List">
+    DELETE FROM todo
+    WHERE todo_no IN
+    <foreach collection="list" item="todoNo" open="(" separator="," close=")">
+        #{todoNo}
+    </foreach>
+</delete>
 </mapper>

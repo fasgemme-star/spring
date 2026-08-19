@@ -1,10 +1,15 @@
 package kr.co.sist.user.todo;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,8 +31,15 @@ public class TodoController {
 	        }
 	    }
 		
-		System.out.println("========="+rDTO.toString());
-		model.addAttribute("todoList", ts.getTodoList(rDTO));
+		List<TodoDomain> todoList = ts.getTodoList(rDTO);
+		
+		int totalCount = todoList.size();
+	    long incompleteCount = todoList.stream()
+	                                   .filter(todo -> "0".equals(todo.getStatus()))
+	                                   .count();
+	    model.addAttribute("todoList", todoList);
+	    model.addAttribute("totalCount", totalCount);
+	    model.addAttribute("incompleteCount", incompleteCount);
 		return "user/todo";
 	}
 	
@@ -39,9 +51,20 @@ public class TodoController {
 	}
 	
 	
-	public String deleteTodo(String todoNo, HttpSession session) {
-		ts.deleteTodo((String)session.getAttribute("userNo"), todoNo);
-		return "";
+	@PostMapping("deleteTodos")
+	@ResponseBody
+	public ResponseEntity<String> deleteTodos(@RequestBody List<String> todoNos) {
+		try {
+			boolean result = ts.deleteTodos(todoNos);
+			if (result) {
+				return ResponseEntity.ok("success");
+			} else {
+				return ResponseEntity.badRequest().body("fail");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("error");
+		}
 	}
 	
 	@PostMapping("modifyTodoStatus")
