@@ -12,6 +12,9 @@ public class AddressService {
 	@Autowired(required = false)
 	private AddressMapper am;
 	 
+	public List<UserDomain> test(RangeDTO rDTO) {
+		return am.test(rDTO);
+	}
 	public List<UserDomain> getAddressList(RangeDTO rDTO) {
         return am.selectAddressList(rDTO);
     }
@@ -40,7 +43,6 @@ public class AddressService {
     	return am.deleteBookmark(uDTO);
     }
 	
-
 
 	
 }

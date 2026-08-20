@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:each="user, cnt : ${users}">
+update users<br>
+set user_name='<span th:text="${user.userName}"></span>', email='<span th:text="${user.email}"></span>', phonenumber='<span th:text="${user.phoneNumber}"></span>'<br> 
+where user_no = '<span th:text="|C${#numbers.formatInteger(cnt.count, 6)}|"></span>';
+</div>
+</body>
+</html>

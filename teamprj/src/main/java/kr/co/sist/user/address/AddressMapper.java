@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AddressMapper {
+	public List<UserDomain> test(RangeDTO rDTO);
 	public List<UserDomain> selectAddressList(RangeDTO rDTO);
 
 	public List<GroupsDomain> selectGroup(String userNo);

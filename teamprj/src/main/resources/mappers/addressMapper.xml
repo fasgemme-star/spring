@@ -4,6 +4,15 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.sist.user.address.AddressMapper">
 
+    <select id="test" parameterType="addressRangeDTO" resultType="addressUserDomain">
+        select user_name userName, email, phonenumber
+from
+(select rownum n, a.*
+from
+(select user_name, email, phonenumber from users
+where company_no = #{companyNo} order by user_no) a) b
+where n between 1 and 29
+    </select>
     <!-- 1. 회사명 단일 조회 (팝업 코드 이식) -->
     <select id="selectCompany" parameterType="String" resultType="String">
         SELECT COMPANY_NAME FROM COMPANY WHERE COMPANY_NO = #{companyNo}
